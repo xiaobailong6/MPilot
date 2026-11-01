@@ -17,6 +17,9 @@ xcuserdata/
 *.p12
 *.p8
 *.pem
+*.jks
+*.keystore
+keystore.properties
 .env
 .env.local
 .env.*.local

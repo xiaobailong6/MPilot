@@ -1,7 +1,6 @@
-name: Android Debug APK
+name: MPilot Android APK
 
-# 本机没有 Android 编译环境，APK 由 Actions 产出：跑通即代表 android/ 通过编译。
-# 触发条件刻意收窄到 android/ 与自身，避免改动 iOS 代码时浪费构建时间。
+# 只产出 Android 的 arm64-v8a 发布包；本机没有 Android 编译环境，APK 全部由这里构建。
 on:
   push:
     branches: [main]
@@ -21,9 +20,14 @@ concurrency:
   group: android-${{ github.ref }}
   cancel-in-progress: true
 
+# 版本号 = 基线 + 构建号。versionCode 必须单调递增，否则装不上覆盖包。
+env:
+  VERSION_CODE: ${{ github.run_number }}
+  VERSION_NAME: 1.0.9.${{ github.run_number }}
+
 jobs:
   assemble:
-    name: Assemble debug
+    name: Assemble arm64-v8a release
     runs-on: ubuntu-latest
     timeout-minutes: 40
     defaults:
@@ -40,30 +44,51 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      # 仓库未提交 gradle-wrapper.jar，因此由 action 直接提供指定版本的 Gradle。
+      # 仓库未提交 gradle-wrapper.jar，由 action 直接提供指定版本的 Gradle。
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.9"
 
-      - name: Toolchain info
+      # 签名材料只存在 Secrets：解码成 android/keystore.p12（.gitignore 已排除）。
+      - name: Decode signing keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.MPILOT_KEYSTORE_BASE64 }}
         run: |
-          java -version
-          gradle --version
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            printf '%s' "$KEYSTORE_BASE64" | base64 -d > keystore.p12
+            echo "已使用仓库 Secrets 中的发布密钥"
+          else
+            echo "::warning::MPILOT_KEYSTORE_BASE64 未配置，本次产物退回 debug 签名"
+          fi
 
-      - name: Assemble debug APK
-        run: gradle --no-daemon --stacktrace assembleDebug
-
-      - name: Collect APK
+      - name: Assemble release APK
+        env:
+          MP_KEYSTORE_PASSWORD: ${{ secrets.MPILOT_KEYSTORE_PASSWORD }}
+          MP_KEY_ALIAS: ${{ secrets.MPILOT_KEY_ALIAS }}
+          MP_KEY_PASSWORD: ${{ secrets.MPILOT_KEY_PASSWORD }}
         run: |
+          gradle --no-daemon --stacktrace assembleRelease \
+            -PmpVersionCode="$VERSION_CODE" \
+            -PmpVersionName="$VERSION_NAME" \
+            -PmpKeystorePath=keystore.p12
+
+      - name: Rename APK
+        run: |
+          set -euo pipefail
+          src=$(find app/build/outputs/apk/release -maxdepth 1 -name '*.apk' -print -quit)
+          if [ -z "$src" ]; then
+            echo "找不到 release APK"
+            exit 1
+          fi
           mkdir -p dist
-          cp app/build/outputs/apk/debug/*.apk dist/ 2>/dev/null || true
+          cp "$src" "dist/MPilot_${VERSION_NAME}.apk"
           ls -l dist
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: moviepilot-android-debug
+          name: MPilot_${{ env.VERSION_NAME }}
           path: android/dist/*.apk
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 30

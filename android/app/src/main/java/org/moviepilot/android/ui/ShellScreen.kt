@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -64,11 +65,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -99,11 +102,12 @@ import org.moviepilot.android.web.WebCoordinator
  * 原生外壳：顶栏、页内标签、底部入口、WebView 与恢复页。
  *
  * 三条与 iOS 不同的落地约定（Android 侧没有系统级等价物）：
- * 1. **玻璃材质用近似实现**：Android 没有 backdrop blur（系统不提供"模糊背后内容"的公开 API），
- *    这里改用"浮动圆角卡片 + 半透明渐变 surface + 淡 accent 描边 + 投影"，
- *    在深浅色下都能读出景深，且不会因为二次绘制 WebView 造成闪烁。
+ * 1. **液态玻璃用"分层材质 + 边缘光 + 光晕"逼近**：Android 没有 backdrop blur，
+ *    无法把 WebView 的内容真模糊到 bar 下面；这里改用半透明分层渐变（厚/薄两种材质）、
+ *    accent 光晕（`Modifier.blur` 真实模糊，API 31+ 生效）、顶部亮/底部暗的边缘光描边、
+ *    以及 18dp 投影，做出"漂浮在页面之上的玻璃片"的观感。
  * 2. **排版不写死高度**：一律 `heightIn(min = …)`，标题/标签单行省略，
- *    页内标签横向可滚动，动作超过 3 个自动收进溢出菜单 —— 系统大字体下不会再截断。
+ *    页内标签横向可滚动，动作按屏宽收放 —— 系统大字体下不会再截断。
  * 3. **WebView 始终固定在同一层级**：它一旦跨 Window 或换父容器就会白屏/重载，
  *    所以所有浮层都画在同一个 Box 里，WebView 本体只改修饰符不重建。
  */
@@ -264,37 +268,60 @@ fun ShellScreen(
     }
 }
 
-// ---------------------------------------------------------------------------- 玻璃材质
+// ---------------------------------------------------------------------------- 液态玻璃材质
 
 /**
- * 顶栏/底栏共用的"玻璃"容器。
+ * 顶栏/底栏共用的"液态玻璃"容器。
  *
- * Android 没有 iOS 26 那种系统级液态玻璃（无法模糊背后的 WebView 内容），
- * 这里用四层叠加做出可接受的近似：投影拉出景深、半透明渐变做材质、
- * accent 细描边模拟高光边缘、圆角浮动卡片避免与页面底色糊在一起。
+ * 分层结构（由外到内）：
+ * 1. **光晕**：accent 径向渐变 + `Modifier.blur(26.dp)`，在 Android 12+ 上是真实高斯模糊，
+ *    低版本自动忽略，不会报错也不会变色；这是最接近"液态"的一层。
+ * 2. **投影**：18dp 大半径软阴影，让玻璃片与页面分离。
+ * 3. **材质**：深色下用低不透明度白（thin material），浅色下用高不透明度白（thick material），
+ *    上下渐变模拟厚度差。
+ * 4. **边缘光**：1dp 渐变描边，顶部接近纯白、底部转暗，模拟折射高光。
  */
 @Composable
-private fun GlassBar(
+private fun GlassPill(
     accent: Color?,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(horizontal = 6.dp, vertical = 4.dp),
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    val shape = RoundedCornerShape(22.dp)
-    val surface = MaterialTheme.colorScheme.surface
-    val tint = accent ?: MaterialTheme.colorScheme.primary
-    Box(modifier = modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp)) {
+    val scheme = MaterialTheme.colorScheme
+    val dark = scheme.background.luminance() < 0.5f
+    val shape = RoundedCornerShape(26.dp)
+    val tint = accent ?: scheme.primary
+    val fill = if (dark) {
+        listOf(Color.White.copy(alpha = 0.17f), Color.White.copy(alpha = 0.07f))
+    } else {
+        listOf(Color.White.copy(alpha = 0.86f), Color.White.copy(alpha = 0.62f))
+    }
+    val rim = if (dark) {
+        listOf(Color.White.copy(alpha = 0.52f), Color.White.copy(alpha = 0.06f))
+    } else {
+        listOf(Color.White.copy(alpha = 0.98f), Color.Black.copy(alpha = 0.05f))
+    }
+    Box(modifier = modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp)) {
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .blur(26.dp)
+                .background(
+                    brush = Brush.radialGradient(
+                        listOf(tint.copy(alpha = if (dark) 0.42f else 0.26f), Color.Transparent),
+                    ),
+                    shape = shape,
+                ),
+        )
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .shadow(elevation = 12.dp, shape = shape, clip = false)
-                .background(
-                    brush = Brush.verticalGradient(
-                        listOf(surface.copy(alpha = 0.94f), surface.copy(alpha = 0.76f)),
-                    ),
-                    shape = shape,
-                )
-                .border(width = 1.dp, color = tint.copy(alpha = 0.22f), shape = shape)
-                .padding(horizontal = 6.dp),
+                .shadow(elevation = 18.dp, shape = shape, clip = false)
+                .clip(shape)
+                .background(brush = Brush.verticalGradient(fill), shape = shape)
+                .border(width = 1.dp, brush = Brush.verticalGradient(rim), shape = shape)
+                .padding(contentPadding),
             content = content,
         )
     }
@@ -334,9 +361,9 @@ private fun ShellTopBar(
         dedupeMoreMenu(snapshot.moreMenu.orEmpty(), snapshot)
     }
 
-    GlassBar(accent = accent) {
+    GlassPill(accent = accent) {
         Row(
-            modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
+            modifier = Modifier.fillMaxWidth().heightIn(min = 50.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             if (snapshot.route.canGoBack) {
@@ -360,6 +387,7 @@ private fun ShellTopBar(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -428,7 +456,7 @@ private fun ShellTopBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .horizontalScroll(rememberScrollState())
-                    .padding(bottom = 4.dp),
+                    .padding(bottom = 2.dp),
                 horizontalArrangement = Arrangement.spacedBy(2.dp),
             ) {
                 for (item in tabs.items) {
@@ -443,7 +471,7 @@ private fun ShellTopBar(
                     )
                     TextButton(
                         onClick = { onSelectTab(tabs.ownerId, item.id) },
-                        modifier = Modifier.heightIn(min = 36.dp),
+                        modifier = Modifier.heightIn(min = 34.dp),
                     ) {
                         Text(
                             text = item.title,
@@ -460,7 +488,7 @@ private fun ShellTopBar(
     }
 }
 
-/** 顶栏图标按钮：自绘点击区，带按下缩放，不依赖各版本 IconButton 的参数差异。 */
+/** 顶栏图标按钮：自绘点击区，带按下缩放与圆形水波，不依赖各版本 IconButton 的参数差异。 */
 @Composable
 private fun BarIconButton(
     enabled: Boolean = true,
@@ -546,15 +574,24 @@ private fun ActionButton(
 
 // ---------------------------------------------------------------------------- 底栏
 
+/**
+ * 悬浮底栏：玻璃胶囊 + 每项独立的圆角高亮片。
+ *
+ * 选中项通过不透明度渐显一层 accent 底片（200ms），按下时整项缩到 0.92，
+ * 未选中项只保留图标与文字，不画底片。
+ */
 @Composable
 private fun ShellBottomBar(
     snapshot: NavigationSnapshot,
     accent: Color?,
     onSelect: (String) -> Unit,
 ) {
-    GlassBar(accent = accent) {
+    GlassPill(
+        accent = accent,
+        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp),
+    ) {
         Row(
-            modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             for (root in snapshot.roots) {
@@ -565,6 +602,10 @@ private fun ShellBottomBar(
                     targetValue = if (pressed) 0.92f else 1f,
                     animationSpec = tween(120),
                 )
+                val highlight by animateFloatAsState(
+                    targetValue = if (selected) 1f else 0f,
+                    animationSpec = tween(200),
+                )
                 val tint by animateColorAsState(
                     targetValue = if (selected) {
                         accent ?: MaterialTheme.colorScheme.primary
@@ -573,20 +614,23 @@ private fun ShellBottomBar(
                     },
                     animationSpec = tween(180),
                 )
+                val accentColor = accent ?: MaterialTheme.colorScheme.primary
                 Column(
                     modifier = Modifier
                         .weight(1f)
-                        .clip(RoundedCornerShape(16.dp))
+                        .padding(horizontal = 2.dp)
+                        .graphicsLayer {
+                            scaleX = scale
+                            scaleY = scale
+                        }
+                        .clip(RoundedCornerShape(18.dp))
+                        .background(accentColor.copy(alpha = 0.16f * highlight))
                         .clickable(
                             interactionSource = interaction,
                             indication = LocalIndication.current,
                             onClick = { onSelect(root.id) },
                         )
-                        .graphicsLayer {
-                            scaleX = scale
-                            scaleY = scale
-                        }
-                        .padding(horizontal = 2.dp, vertical = 8.dp),
+                        .padding(vertical = 7.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                 ) {
@@ -602,11 +646,12 @@ private fun ShellBottomBar(
                     Text(
                         text = root.title,
                         style = MaterialTheme.typography.labelSmall,
+                        fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
                         color = tint,
                         maxLines = 1,
                         softWrap = false,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.widthIn(max = 80.dp),
+                        modifier = Modifier.widthIn(max = 76.dp),
                     )
                 }
             }
@@ -660,7 +705,7 @@ private fun RecoveryOverlay(message: String, onRetry: () -> Unit, onSignOut: () 
  * 顶部"更多"菜单与底部入口去重：**底栏优先**。
  *
  * 网页给的更多菜单是完整的导航目录，其中常包含底栏已经常驻的主入口。
- * 这里按 path（忽略结尾斜杠）、id、以及"标题相同且 path 一致"三种情况剔除重复，
+ * 这里按 path（忽略结尾斜杠与大小写）、id、以及"path 为 / 且标题一致"三种情况剔除重复，
  * 只影响原生显示，不改变网页快照本身；点击仍走原 `navigation.open` 校验。
  */
 private fun dedupeMoreMenu(
@@ -690,7 +735,7 @@ private fun normalizePath(path: String): String = path.trimEnd('/').lowercase()
 /**
  * chrome.prepare / host.layout 共用的布局声明。
  *
- * 顶栏/底栏是浮动卡片，但 WebView 仍排在两者之间（不重叠），
+ * 顶栏/底栏是浮动玻璃片，但 WebView 仍排在两者之间（不重叠），
  * 所以 systemSafeArea / chromeOcclusion / contentInsets 继续报 0，
  * 避免网页再叠加一层内边距（校准项见 android/PORTING.md）。
  */

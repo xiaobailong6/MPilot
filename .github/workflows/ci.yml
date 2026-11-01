@@ -1,9 +1,8 @@
 name: iOS checks
 
 on:
-  push:
-    branches: ['**']
-  pull_request:
+  # 默认不在 push / pull_request 上运行：Android 侧的提交不再触发 iOS 检查。
+  # 需要时在 Actions 页面手动 Run workflow，或由 release 流程以 workflow_call 复用。
   workflow_dispatch:
   workflow_call:
 

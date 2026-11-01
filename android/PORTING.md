@@ -235,9 +235,9 @@ notificationInstallation: "<安装 UUID>"
 
 实现集中在 `ui/ShellScreen.kt`，改观感只动这一个文件：
 
-- **玻璃材质**：Android 没有 backdrop blur，`Modifier.blur()` 模糊的是自己而不是背后内容。
-  这里用"浮动圆角卡片 + 半透明渐变 surface + accent 细描边 + 投影"近似，
-  深浅色都读得出景深，也不会因为二次绘制 WebView 掉帧或闪黑。
+- **液态玻璃**：Android 没有 backdrop blur，`Modifier.blur()` 模糊的是自己而不是背后内容。
+  `GlassPill` 用四层叠加逼近：accent 径向光晕（`blur(26.dp)`，API 31+ 真实高斯模糊）、18dp 投影、
+  深浅色两套半透明分层填充（thick/thin material）、顶部亮底部暗的边缘光描边。
   真要"内容从 bar 下透出来"，得改成全屏 WebView + 按 `chromeOcclusion` 协商，改动面很大，暂不做。
 - **排版不再写死高度**：一律 `heightIn(min = …)`；标题、标签单行 + `Ellipsis`；
   页内标签横向可滚动；顶栏内联动作按屏宽取 2/3/4 个，其余进溢出菜单。

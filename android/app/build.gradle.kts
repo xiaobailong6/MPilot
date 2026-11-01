@@ -4,17 +4,59 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
+// ---------------------------------------------------------------- 版本号
+
+// 默认取 gradle.properties 的基线；CI 传 -PmpVersionCode / -PmpVersionName 覆盖，
+// 这样每次产物的 versionCode 都递增，可以覆盖安装升级（Android 的硬要求）。
+val mpVersionCode = (project.findProperty("mpVersionCode") as String?)?.toIntOrNull() ?: 1
+val mpVersionName = (project.findProperty("mpVersionName") as String?) ?: "0.0.dev"
+
+// ---------------------------------------------------------------- 发布签名
+
+// 密钥不进仓库：CI 把 Secrets 里的 base64 解码成 android/keystore.p12；
+// 本地构建可放同名文件，或用 -PmpKeystorePath=... 指定路径。
+val mpKeystorePath = (project.findProperty("mpKeystorePath") as String?) ?: "keystore.p12"
+val mpKeystoreFile = rootProject.file(mpKeystorePath)
+val mpKeystorePassword = (project.findProperty("mpKeystorePassword") as String?)
+    ?: System.getenv("MP_KEYSTORE_PASSWORD")
+val mpKeyAlias = (project.findProperty("mpKeyAlias") as String?)
+    ?: System.getenv("MP_KEY_ALIAS")
+    ?: "mpilot"
+val mpKeyPassword = (project.findProperty("mpKeyPassword") as String?)
+    ?: System.getenv("MP_KEY_PASSWORD")
+    ?: mpKeystorePassword
+val hasReleaseSigning = mpKeystoreFile.isFile && !mpKeystorePassword.isNullOrEmpty()
+
 android {
     namespace = "org.moviepilot.android"
     compileSdk = 35
 
     defaultConfig {
         applicationId = "org.moviepilot.android"
-        // 26 起 WebView 多 Profile、Keystore 设备锁绑定、自适应图标都可用。
+        // 26 起 WebView 消息监听、Keystore 设备锁绑定、自适应图标都可用。
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0.9"
+        versionCode = mpVersionCode
+        versionName = mpVersionName
+
+        // 只产出 arm64-v8a：目标设备都是 arm64，去掉其他 ABI 可显著缩小体积。
+        // 注意：x86 模拟器与 32 位老机型将无法安装。
+        ndk {
+            abiFilters.add("arm64-v8a")
+        }
+    }
+
+    signingConfigs {
+        if (hasReleaseSigning) {
+            create("release") {
+                storeFile = mpKeystoreFile
+                // 仓库自带的密钥是 PKCS12；显式声明避免 Gradle 按扩展名猜错类型。
+                storeType = "PKCS12"
+                storePassword = mpKeystorePassword
+                keyAlias = mpKeyAlias
+                keyPassword = mpKeyPassword
+            }
+        }
     }
 
     buildTypes {
@@ -25,6 +67,12 @@ android {
             // 首期不混淆：桥接协议依赖固定字符串，R8 全量规则留到功能稳定后再加。
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = if (hasReleaseSigning) {
+                signingConfigs.getByName("release")
+            } else {
+                // 没配置密钥时退回 debug 签名，产物仍可安装（但不能用于正式发布）。
+                signingConfigs.getByName("debug")
+            }
         }
     }
 
