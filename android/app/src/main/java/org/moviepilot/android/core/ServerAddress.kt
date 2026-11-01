@@ -2,12 +2,17 @@ package org.moviepilot.android.core
 
 import android.net.Uri
 
-/** 实例地址输入错误；只描述配置问题，不包含用户输入。 */
-enum class ServerAddressError {
-    InvalidUrl,
-    UnsupportedScheme,
-    CredentialsNotAllowed,
-    QueryOrFragmentNotAllowed,
+/**
+ * 实例地址输入错误；只描述配置问题，不包含用户输入。
+ *
+ * 必须是 Throwable 才能 `throw`，又不能是 enum（enum 只能继承 Enum），
+ * 因此用 sealed class + data object：既保留 `when` 的穷尽检查，又能作为异常抛出。
+ */
+sealed class ServerAddressError(message: String) : Exception(message) {
+    data object InvalidUrl : ServerAddressError("invalid_url")
+    data object UnsupportedScheme : ServerAddressError("unsupported_scheme")
+    data object CredentialsNotAllowed : ServerAddressError("credentials_not_allowed")
+    data object QueryOrFragmentNotAllowed : ServerAddressError("query_or_fragment_not_allowed")
 }
 
 /**

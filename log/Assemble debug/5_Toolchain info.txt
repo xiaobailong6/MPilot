@@ -1,0 +1,43 @@
+﻿2026-11-01T13:52:14.1124775Z ##[group]Run java -version
+2026-11-01T13:52:14.1124992Z [36;1mjava -version[0m
+2026-11-01T13:52:14.1125131Z [36;1mgradle --version[0m
+2026-11-01T13:52:14.1142916Z shell: /usr/bin/bash -e {0}
+2026-11-01T13:52:14.1143076Z env:
+2026-11-01T13:52:14.1143252Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-01T13:52:14.1143532Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-01T13:52:14.1143769Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-11-01T13:52:14.1143944Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-11-01T13:52:14.1144106Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-11-01T13:52:14.1144277Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-11-01T13:52:14.1144519Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-11-01T13:52:14.1144782Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-11-01T13:52:14.1144959Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-11-01T13:52:14.1145134Z ##[endgroup]
+2026-11-01T13:52:14.1417663Z openjdk version "17.0.21" 2026-10-20
+2026-11-01T13:52:14.1418244Z OpenJDK Runtime Environment Temurin-17.0.21+9 (build 17.0.21+9)
+2026-11-01T13:52:14.1418751Z OpenJDK 64-Bit Server VM Temurin-17.0.21+9 (build 17.0.21+9, mixed mode, sharing)
+2026-11-01T13:52:14.5586288Z 
+2026-11-01T13:52:14.5586833Z Welcome to Gradle 8.9!
+2026-11-01T13:52:14.5587131Z 
+2026-11-01T13:52:14.5588326Z Here are the highlights of this release:
+2026-11-01T13:52:14.5589199Z  - Enhanced Error and Warning Messages
+2026-11-01T13:52:14.5590130Z  - IDE Integration Improvements
+2026-11-01T13:52:14.5590827Z  - Daemon JVM Information
+2026-11-01T13:52:14.5590975Z 
+2026-11-01T13:52:14.5592793Z For more details see https://docs.gradle.org/8.9/release-notes.html
+2026-11-01T13:52:14.5593086Z 
+2026-11-01T13:52:14.5593232Z 
+2026-11-01T13:52:14.5594520Z ------------------------------------------------------------
+2026-11-01T13:52:14.5594837Z Gradle 8.9
+2026-11-01T13:52:14.5596107Z ------------------------------------------------------------
+2026-11-01T13:52:14.5596362Z 
+2026-11-01T13:52:14.5597234Z Build time:    2024-07-11 14:37:41 UTC
+2026-11-01T13:52:14.5598496Z Revision:      d536ef36a19186ccc596d8817123e5445f30fef8
+2026-11-01T13:52:14.5598756Z 
+2026-11-01T13:52:14.5599323Z Kotlin:        1.9.23
+2026-11-01T13:52:14.5600009Z Groovy:        3.0.21
+2026-11-01T13:52:14.5601678Z Ant:           Apache Ant(TM) version 1.10.13 compiled on January 4 2023
+2026-11-01T13:52:14.5602499Z Launcher JVM:  17.0.21 (Eclipse Adoptium 17.0.21+9)
+2026-11-01T13:52:14.5604383Z Daemon JVM:    /usr/lib/jvm/temurin-17-jdk-amd64 (no JDK specified, using current Java home)
+2026-11-01T13:52:14.5604852Z OS:            Linux 7.0.0-1017-azure amd64
+2026-11-01T13:52:14.5605034Z 

@@ -1,0 +1,35 @@
+﻿2026-11-01T13:53:58.6330025Z Post job cleanup.
+2026-11-01T13:53:58.8156104Z In post-action step
+2026-11-01T13:53:58.8164048Z ##[group]Stopping Gradle daemons
+2026-11-01T13:53:58.8164621Z Stopping Gradle daemons for /home/runner/work/_temp/.gradle-actions/gradle-installations/installs/gradle-8.9
+2026-11-01T13:53:58.8174900Z [command]/home/runner/work/_temp/.gradle-actions/gradle-installations/installs/gradle-8.9/bin/gradle --stop
+2026-11-01T13:53:59.3056419Z No Gradle daemons are running.
+2026-11-01T13:53:59.3164343Z ##[endgroup]
+2026-11-01T13:53:59.3164894Z Not performing cache-cleanup due to build failure
+2026-11-01T13:53:59.3165508Z ##[group]Caching Gradle state
+2026-11-01T13:53:59.3381660Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/MPilot/MPilot --files-from manifest.txt --use-compress-program zstdmt
+2026-11-01T13:53:59.6060919Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/MPilot/MPilot --files-from manifest.txt --use-compress-program zstdmt
+2026-11-01T13:53:59.6492348Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/MPilot/MPilot --files-from manifest.txt --use-compress-program zstdmt
+2026-11-01T13:53:59.6595772Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/MPilot/MPilot --files-from manifest.txt --use-compress-program zstdmt
+2026-11-01T13:53:59.8778810Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/MPilot/MPilot --files-from manifest.txt --use-compress-program zstdmt
+2026-11-01T13:53:59.9573296Z Sent 71785 of 71785 (100.0%), 0.3 MBs/sec
+2026-11-01T13:54:00.1120898Z Sent 106497 of 106497 (100.0%), 0.5 MBs/sec
+2026-11-01T13:54:00.1121959Z Sent 111062 of 111062 (100.0%), 0.4 MBs/sec
+2026-11-01T13:54:00.1237754Z Saved cache entry with key gradle-instrumented-jars-v1-5097687f5e544e990b63b4f224dc7144 from /home/runner/.gradle/caches/jars-*/*/ in 531ms
+2026-11-01T13:54:00.1627197Z Saved cache entry with key gradle-kotlin-dsl-v1-087a2191fc1e31186dd454b386f4e3fc from /home/runner/.gradle/caches/*/kotlin-dsl/accessors/*/,/home/runner/.gradle/caches/*/kotlin-dsl/scripts/*/ in 570ms
+2026-11-01T13:54:00.2855471Z Saved cache entry with key gradle-groovy-dsl-v1-d64978a2a5ed826191cf601cc5e1acda from /home/runner/.gradle/caches/*/groovy-dsl/*/ in 665ms
+2026-11-01T13:54:00.4282040Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/MPilot/MPilot --files-from manifest.txt --use-compress-program zstdmt
+2026-11-01T13:54:00.6103691Z Sent 39619897 of 39619897 (100.0%), 44.8 MBs/sec
+2026-11-01T13:54:00.7650367Z Saved cache entry with key gradle-generated-gradle-jars-v1-26cfecc158c44513d188405a5d2d0d9c from /home/runner/.gradle/caches/8.9/generated-gradle-jars/gradle-api-8.9.jar in 1436ms
+2026-11-01T13:54:01.4161998Z Sent 4288758 of 205615350 (2.1%), 4.1 MBs/sec
+2026-11-01T13:54:01.8665881Z Sent 205615350 of 205615350 (100.0%), 135.2 MBs/sec
+2026-11-01T13:54:02.0295874Z Saved cache entry with key gradle-dependencies-v1-3d5e70a3a69ab6934d1d8774300629c2 from /home/runner/.gradle/caches/modules-*/files-*/*/*/*/* in 2468ms
+2026-11-01T13:54:02.5581267Z Sent 26823292 of 161041020 (16.7%), 25.6 MBs/sec
+2026-11-01T13:54:03.0845446Z Sent 161041020 of 161041020 (100.0%), 100.6 MBs/sec
+2026-11-01T13:54:03.2437209Z Saved cache entry with key gradle-transforms-v1-56ab161d65a9ef56b4fed52bf7021ae3 from /home/runner/.gradle/caches/transforms-4/*/,/home/runner/.gradle/caches/*/transforms/*/ in 3281ms
+2026-11-01T13:54:04.0494797Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/MPilot/MPilot --files-from manifest.txt --use-compress-program zstdmt
+2026-11-01T13:54:04.8733808Z Sent 20160753 of 20160753 (100.0%), 29.9 MBs/sec
+2026-11-01T13:54:05.0240172Z Saved cache entry with key gradle-home-v1|Linux-X64|assemble[c3d13ebf52c079db94adee0bae4f9baa]-c71c3f0e3ecad54132e292bc60e56a49e3e77fc1 from /home/runner/.gradle/caches,/home/runner/.gradle/notifications,/home/runner/.gradle/.setup-gradle in 986ms
+2026-11-01T13:54:05.0241597Z ##[endgroup]
+2026-11-01T13:54:05.0247173Z Generating Job Summary
+2026-11-01T13:54:05.0255963Z Completed post-action step

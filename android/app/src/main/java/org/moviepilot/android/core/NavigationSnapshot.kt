@@ -173,7 +173,7 @@ data class NavigationSnapshot(
 ) {
     /** 验证所有路径、数量与标识唯一性；不把不完整快照提交到原生控件。 */
     fun validate() {
-        require(IS_ROUTE.matches(route.fullPath) || isRoute(route.fullPath)) { "route" }
+        require(isRoute(route.fullPath)) { "route" }
         require(isLabel(route.title)) { "title" }
         if (route.backTarget != null) require(isRoute(route.backTarget)) { "backTarget" }
         require(!route.canGoBack || route.backTarget != null) { "backTarget" }
