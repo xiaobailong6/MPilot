@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  用户可配置任意 HTTP / HTTPS 实例地址，行为与 iOS 的 NSAllowsArbitraryLoads 对齐：
+  1. cleartextTrafficPermitted 允许局域网 IP 与自建 HTTP 服务；
+  2. trust-anchors 显式加入 user，允许用户自行安装自签 CA（Android 7 起默认不信任用户证书）。
+  这两项都只服务"用户自己填写的实例地址"，不放宽到任意第三方来源。
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

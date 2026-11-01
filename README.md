@@ -20,6 +20,8 @@ iOS 26+ 支持系统 Liquid Glass；提供侧滑返回、卡片长按菜单、�
 | [界面截图](screenshots/README.md) | 页面、菜单、弹窗及离线截图册 |
 | [自行构建与开发](ios/README.md) | Xcode 安装、签名、IPA 构建与测试 |
 | [前端集成](integration/README.md) | 兼容版本与本地联调 |
+| [Android 客户端](android/README.md) | Kotlin + Compose + WebView 骨架、Actions 出包与安装 |
+| [Android 移植步骤](android/PORTING.md) | 组件映射、分阶段步骤、坑位与待办 |
 
 ## 许可证
 
