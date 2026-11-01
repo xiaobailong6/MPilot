@@ -51,16 +51,26 @@ jobs:
           gradle-version: "8.9"
 
       # 签名材料只存在 Secrets：解码成 android/keystore.p12（.gitignore 已排除）。
+      # Secret 里常会混入复制粘贴带来的换行/回车，先剥离全部空白再解码，
+      # 并校验解码结果的大小，避免把损坏的密钥带进签名步骤。
       - name: Decode signing keystore
         env:
           KEYSTORE_BASE64: ${{ secrets.MPILOT_KEYSTORE_BASE64 }}
         run: |
-          if [ -n "$KEYSTORE_BASE64" ]; then
-            printf '%s' "$KEYSTORE_BASE64" | base64 -d > keystore.p12
-            echo "已使用仓库 Secrets 中的发布密钥"
-          else
+          set -euo pipefail
+          if [ -z "$KEYSTORE_BASE64" ]; then
             echo "::warning::MPILOT_KEYSTORE_BASE64 未配置，本次产物退回 debug 签名"
+            exit 0
           fi
+          printf '%s' "$KEYSTORE_BASE64" | tr -d '[:space:]' > keystore.b64.clean
+          base64 -d keystore.b64.clean > keystore.p12
+          rm keystore.b64.clean
+          size=$(wc -c < keystore.p12)
+          if [ "$size" -lt 100 ]; then
+            echo "::error::解码后的 keystore 只有 $size 字节，Secret 内容可能不完整"
+            exit 1
+          fi
+          echo "已解码发布密钥（$size 字节）"
 
       - name: Assemble release APK
         env:

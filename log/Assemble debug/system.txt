@@ -1,8 +1,0 @@
-2026-11-01T13:51:56.9070000Z Job is waiting for a hosted runner to come online.
-2026-11-01T13:51:56.9030000Z Requested labels: ubuntu-latest
-2026-11-01T13:51:56.9030000Z Job defined at: xiaobailong6/MPilot/.github/workflows/android.yml@refs/heads/main
-2026-11-01T13:51:56.9030000Z Waiting for a runner to pick up this job...
-2026-11-01T13:51:56.9050000Z Job is about to start running on the hosted runner: GitHub Actions 1000004011
-2026-11-01T13:51:56.8990000Z Evaluating assemble.if
-2026-11-01T13:51:56.8990000Z Evaluating: success()
-2026-11-01T13:51:56.8990000Z Result: true
