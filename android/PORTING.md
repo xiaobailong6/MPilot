@@ -231,6 +231,24 @@ notificationInstallation: "<安装 UUID>"
 一旦为了 Android 在 MoviePilot-Frontend 里写 `if (isAndroid)`，三端协议就开始分叉。
 需要平台差异时，正确做法是新增**能力位**（例如 `sheetsVersion: 2`），由能力位驱动行为。
 
+### 6.11 外壳观感约定（玻璃 / 排版 / 动画 / 去重）
+
+实现集中在 `ui/ShellScreen.kt`，改观感只动这一个文件：
+
+- **玻璃材质**：Android 没有 backdrop blur，`Modifier.blur()` 模糊的是自己而不是背后内容。
+  这里用"浮动圆角卡片 + 半透明渐变 surface + accent 细描边 + 投影"近似，
+  深浅色都读得出景深，也不会因为二次绘制 WebView 掉帧或闪黑。
+  真要"内容从 bar 下透出来"，得改成全屏 WebView + 按 `chromeOcclusion` 协商，改动面很大，暂不做。
+- **排版不再写死高度**：一律 `heightIn(min = …)`；标题、标签单行 + `Ellipsis`；
+  页内标签横向可滚动；顶栏内联动作按屏宽取 2/3/4 个，其余进溢出菜单。
+  系统大字体下外壳会自然变高，不会再截断文字。
+- **动画**：标题 `AnimatedContent` 交叉淡入 + 轻微位移；顶/底栏进出场；
+  路由变化时在 WebView 上盖一层底色淡出（240 ms）；按钮按下缩放 0.90 / 底栏 0.92。
+- **禁止**为了做转场把 WebView 放进 `AnimatedContent`/`AnimatedVisibility` 的内容分支，
+  那会重建容器（白屏、丢状态）。转场只能通过叠加层和修饰符实现。
+- **菜单去重（底栏优先）**：`更多` 菜单里与底部入口同 path（忽略结尾斜杠）或同 id 的条目直接过滤，
+  只影响原生显示；点击仍走 `navigation.open` 的原快照校验。
+
 ## 7. 待真机验证的未定项
 
 1. **前端是否有 UA / `isIOS` 门控**：前端仓库不在本工作区，无法静态确认。
