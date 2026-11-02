@@ -1,0 +1,93 @@
+﻿2026-11-01T23:44:09.5871522Z Post job cleanup.
+2026-11-01T23:44:09.8325100Z In post-action step
+2026-11-01T23:44:09.8335023Z ##[group]Stopping Gradle daemons
+2026-11-01T23:44:09.8336519Z ##[endgroup]
+2026-11-01T23:44:09.8348162Z ##[group]Provision Gradle >= 8.11
+2026-11-01T23:44:10.7151280Z Cache hit for: gradle-8.11
+2026-11-01T23:44:11.8354599Z Received 134217728 of 136585574 (98.3%), 126.1 MBs/sec
+2026-11-01T23:44:11.9273215Z Received 136585574 of 136585574 (100.0%), 117.7 MBs/sec
+2026-11-01T23:44:11.9278013Z Cache Size: ~130 MB (136585574 B)
+2026-11-01T23:44:11.9428638Z [command]/usr/bin/tar -xf /home/runner/work/_temp/7f3a3c84-7a7e-4c09-8d51-157ba8e23a64/cache.tzst -P -C /home/runner/work/MPilot/MPilot --use-compress-program unzstd
+2026-11-01T23:44:12.1461987Z Cache restored successfully
+2026-11-01T23:44:12.1526721Z Restored Gradle distribution gradle-8.11 from cache to /home/runner/work/_temp/.gradle-actions/gradle-installations/downloads/gradle-8.11-bin.zip
+2026-11-01T23:44:12.1544824Z [command]/usr/bin/unzip -o -q /home/runner/work/_temp/.gradle-actions/gradle-installations/downloads/gradle-8.11-bin.zip
+2026-11-01T23:44:13.1280157Z Extracted Gradle 8.11 to /home/runner/work/_temp/.gradle-actions/gradle-installations/installs/gradle-8.11
+2026-11-01T23:44:13.1282808Z Provisioned Gradle executable /home/runner/work/_temp/.gradle-actions/gradle-installations/installs/gradle-8.11/bin/gradle
+2026-11-01T23:44:13.1284558Z ##[endgroup]
+2026-11-01T23:44:13.1291527Z ##[group]Executing Gradle to clean up caches
+2026-11-01T23:44:13.1292542Z Cleaning up caches last used before 1793576645225
+2026-11-01T23:44:13.1296507Z [command]/home/runner/work/_temp/.gradle-actions/gradle-installations/installs/gradle-8.11/bin/gradle -g /home/runner/.gradle -I init.gradle --info --no-daemon --no-scan --build-cache -DGITHUB_DEPENDENCY_GRAPH_ENABLED=false -DGRADLE_ACTIONS_SKIP_BUILD_RESULT_CAPTURE=true noop
+2026-11-01T23:44:13.6188228Z Initialized native services in: /home/runner/.gradle/native
+2026-11-01T23:44:13.6221349Z Initialized jansi services in: /home/runner/.gradle/native
+2026-11-01T23:44:13.8312122Z To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.11/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+2026-11-01T23:44:13.8341386Z Starting process 'Gradle build daemon'. Working directory: /home/runner/.gradle/daemon/8.11 Command: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-opens=java.base/java.nio.charset=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.xml/javax.xml.namespace=ALL-UNNAMED -XX:MaxMetaspaceSize=384m -XX:+HeapDumpOnOutOfMemoryError -Xms256m -Xmx512m -Dfile.encoding=UTF-8 -Duser.country -Duser.language=en -Duser.variant -cp /home/runner/work/_temp/.gradle-actions/gradle-installations/installs/gradle-8.11/lib/gradle-daemon-main-8.11.jar -javaagent:/home/runner/work/_temp/.gradle-actions/gradle-installations/installs/gradle-8.11/lib/agents/gradle-instrumentation-agent-8.11.jar org.gradle.launcher.daemon.bootstrap.GradleDaemon 8.11
+2026-11-01T23:44:13.9298593Z Successfully started process 'Gradle build daemon'
+2026-11-01T23:44:14.9341516Z An attempt to start the daemon took 1.033 secs.
+2026-11-01T23:44:15.0304617Z The client will now receive all logging from the daemon (pid: 2531). The daemon log file: /home/runner/.gradle/daemon/8.11/daemon-2531.out.log
+2026-11-01T23:44:15.0306255Z Daemon will be stopped at the end of the build 
+2026-11-01T23:44:15.3295652Z Using 4 worker leases.
+2026-11-01T23:44:15.5302755Z Received JVM installation metadata from '/usr/lib/jvm/temurin-17-jdk-amd64': {JAVA_HOME=/usr/lib/jvm/temurin-17-jdk-amd64, JAVA_VERSION=17.0.21, JAVA_VENDOR=Eclipse Adoptium, RUNTIME_NAME=OpenJDK Runtime Environment, RUNTIME_VERSION=17.0.21+9, VM_NAME=OpenJDK 64-Bit Server VM, VM_VERSION=17.0.21+9, VM_VENDOR=Eclipse Adoptium, OS_ARCH=amd64}
+2026-11-01T23:44:15.8312077Z Watching the file system is configured to be enabled if available
+2026-11-01T23:44:15.8313794Z Now considering [/home/runner/work/_temp/dummy-cleanup-project] as hierarchies to watch
+2026-11-01T23:44:15.8316513Z File system watching is active
+2026-11-01T23:44:16.3298232Z Caching disabled for Groovy DSL script compilation (cp_init) because:
+2026-11-01T23:44:16.3299495Z   Build cache is disabled
+2026-11-01T23:44:16.3300138Z   Not worth caching.
+2026-11-01T23:44:16.3301569Z Compiling initialization script '/home/runner/work/_temp/dummy-cleanup-project/init.gradle' using SubsetScriptTransformer.
+2026-11-01T23:44:17.0331742Z Caching disabled for Groovy DSL script compilation (init) because:
+2026-11-01T23:44:17.0360987Z   Build cache is disabled
+2026-11-01T23:44:17.0361737Z   Not worth caching.
+2026-11-01T23:44:17.0382334Z Compiling initialization script '/home/runner/work/_temp/dummy-cleanup-project/init.gradle' using BuildScriptTransformer.
+2026-11-01T23:44:18.0306320Z gradle/actions: Not capturing build results
+2026-11-01T23:44:18.1295385Z Starting Build
+2026-11-01T23:44:18.2295542Z Settings evaluated using settings file '/home/runner/work/_temp/dummy-cleanup-project/settings.gradle'.
+2026-11-01T23:44:18.2301067Z Using local directory build cache for the root build (location = /home/runner/.gradle/caches/build-cache-1, remove unused entries = older than 2026-11-01 23:44:05 UTC).
+2026-11-01T23:44:18.3295984Z Projects loaded. Root project using build file '/home/runner/work/_temp/dummy-cleanup-project/build.gradle'.
+2026-11-01T23:44:18.3298442Z Included projects: [root project 'dummy-cleanup-project']
+2026-11-01T23:44:18.6298614Z 
+2026-11-01T23:44:18.6345561Z > Configure project :
+2026-11-01T23:44:18.6347391Z Evaluating root project 'dummy-cleanup-project' using build file '/home/runner/work/_temp/dummy-cleanup-project/build.gradle'.
+2026-11-01T23:44:18.6372470Z All projects evaluated.
+2026-11-01T23:44:18.6379938Z Task name matched 'noop'
+2026-11-01T23:44:18.6391401Z Selected primary task 'noop' from project :
+2026-11-01T23:44:18.6392025Z Tasks to be executed: [task ':noop']
+2026-11-01T23:44:18.6392561Z Tasks that were excluded: []
+2026-11-01T23:44:18.6393236Z Resolve mutations for :noop (Thread[Execution worker,5,main]) started.
+2026-11-01T23:44:18.7301778Z :noop (Thread[Execution worker,5,main]) started.
+2026-11-01T23:44:18.7330065Z 
+2026-11-01T23:44:18.7330767Z > Task :noop UP-TO-DATE
+2026-11-01T23:44:18.7331463Z Skipping task ':noop' as it has no actions.
+2026-11-01T23:44:18.7331972Z 
+2026-11-01T23:44:18.7332397Z BUILD SUCCESSFUL in 5s
+2026-11-01T23:44:18.7333411Z Build cache (/home/runner/.gradle/caches/build-cache-1) removing files not accessed on or after Sun Nov 01 23:44:05 UTC 2026.
+2026-11-01T23:44:18.7334793Z Build cache (/home/runner/.gradle/caches/build-cache-1) cleanup deleted 0 files/directories.
+2026-11-01T23:44:18.7336125Z Build cache (/home/runner/.gradle/caches/build-cache-1) cleaned up in 0.003 secs.
+2026-11-01T23:44:18.7850020Z groovy-dsl (/home/runner/.gradle/caches/8.11/groovy-dsl) removing files not accessed on or after Sun Nov 01 23:44:05 UTC 2026.
+2026-11-01T23:44:18.7876593Z groovy-dsl (/home/runner/.gradle/caches/8.11/groovy-dsl) cleanup deleted 2 files/directories.
+2026-11-01T23:44:18.7878216Z groovy-dsl (/home/runner/.gradle/caches/8.11/groovy-dsl) cleaned up in 0.013 secs.
+2026-11-01T23:44:18.7886641Z jars (/home/runner/.gradle/caches/jars-9) cleanup deleted 0 files/directories.
+2026-11-01T23:44:18.7888251Z jars (/home/runner/.gradle/caches/jars-9) removing files not accessed on or after Sun Nov 01 23:44:05 UTC 2026.
+2026-11-01T23:44:18.7889649Z jars (/home/runner/.gradle/caches/jars-9) cleanup deleted 1 files/directories.
+2026-11-01T23:44:18.7891034Z jars (/home/runner/.gradle/caches/jars-9) cleaned up in 0.004 secs.
+2026-11-01T23:44:18.7893107Z Artifact transforms cache (/home/runner/.gradle/caches/8.11/transforms) removing files not accessed on or after Sun Nov 01 23:44:05 UTC 2026.
+2026-11-01T23:44:18.7895011Z Artifact transforms cache (/home/runner/.gradle/caches/8.11/transforms) cleanup deleted 0 files/directories.
+2026-11-01T23:44:18.7896642Z Artifact transforms cache (/home/runner/.gradle/caches/8.11/transforms) cleaned up in 0.0 secs.
+2026-11-01T23:44:18.7898562Z dependencies-accessors (/home/runner/.gradle/caches/8.11/dependencies-accessors) removing files not accessed on or after Sun Nov 01 23:44:05 UTC 2026.
+2026-11-01T23:44:18.7900996Z dependencies-accessors (/home/runner/.gradle/caches/8.11/dependencies-accessors) cleanup deleted 0 files/directories.
+2026-11-01T23:44:18.7902827Z dependencies-accessors (/home/runner/.gradle/caches/8.11/dependencies-accessors) cleaned up in 0.0 secs.
+2026-11-01T23:44:18.7904439Z artifact cache (/home/runner/.gradle/caches/modules-2) cleanup deleted 0 files/directories.
+2026-11-01T23:44:18.7906206Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/resources-2.1] cleanup deleted 0 files/directories.
+2026-11-01T23:44:18.7908493Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/resources-2.1] removing files not accessed on or after Sun Nov 01 23:44:05 UTC 2026.
+2026-11-01T23:44:18.7911049Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/resources-2.1] cleanup deleted 0 files/directories.
+2026-11-01T23:44:18.7913209Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/files-2.1] cleanup deleted 0 files/directories.
+2026-11-01T23:44:18.7915462Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/files-2.1] removing files not accessed on or after Sun Nov 01 23:44:05 UTC 2026.
+2026-11-01T23:44:18.7917687Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/files-2.1] cleanup deleted 0 files/directories.
+2026-11-01T23:44:18.7919762Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/metadata-2.107] cleanup deleted 0 files/directories.
+2026-11-01T23:44:18.7922356Z artifact cache (/home/runner/.gradle/caches/modules-2) cleanup deleted 0 files/directories.
+2026-11-01T23:44:18.7924109Z artifact cache (/home/runner/.gradle/caches/modules-2) cleaned up in 0.003 secs.
+2026-11-01T23:44:18.9228285Z ##[endgroup]
+2026-11-01T23:44:18.9228847Z ##[group]Caching Gradle state
+2026-11-01T23:44:18.9238127Z Cache hit occurred on the cache key gradle-home-v1|Linux-X64|assemble[a4381a93da7bb0d2b68bcfd157992889]-98d5015c9eecb9c0f66254bbe7dd9ac6891713b2, not saving cache.
+2026-11-01T23:44:18.9239155Z ##[endgroup]
+2026-11-01T23:44:18.9247194Z Generating Job Summary
+2026-11-01T23:44:18.9262617Z Completed post-action step

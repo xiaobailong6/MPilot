@@ -63,11 +63,13 @@ jobs:
             exit 0
           fi
           printf '%s' "$KEYSTORE_BASE64" | tr -d '[:space:]' > keystore.b64.clean
-          base64 -d keystore.b64.clean > keystore.p12
+          # --ignore-garbage：跳过字母表之外的杂散字符（聊天复制常见的软换行符、全角符号等）。
+          base64 --ignore-garbage --decode keystore.b64.clean > keystore.p12
           rm keystore.b64.clean
           size=$(wc -c < keystore.p12)
-          if [ "$size" -lt 100 ]; then
-            echo "::error::解码后的 keystore 只有 $size 字节，Secret 内容可能不完整"
+          # 当前发布密钥固定为 2729 字节；不等于该值说明 Secret 被截断或篡改。
+          if [ "$size" -ne 2729 ]; then
+            echo "::error::解码后的 keystore 为 $size 字节，预期 2729 字节。请重新配置 MPILOT_KEYSTORE_BASE64"
             exit 1
           fi
           echo "已解码发布密钥（$size 字节）"

@@ -1,379 +1,353 @@
-﻿2026-11-01T15:51:38.3811386Z Current runner version: '2.338.2'
-2026-11-01T15:51:38.3847989Z ##[group]Runner Image Provisioner
-2026-11-01T15:51:38.3849295Z Hosted Compute Agent
-2026-11-01T15:51:38.3850360Z Version: 20261021.618
-2026-11-01T15:51:38.3851373Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
-2026-11-01T15:51:38.3852562Z Build Date: 2026-10-21T00:45:21Z
-2026-11-01T15:51:38.3853798Z Worker ID: {69230ee4-027c-4652-bad1-9206c877bc23}
-2026-11-01T15:51:38.3854529Z Region: centralus
-2026-11-01T15:51:38.3855103Z Cloud: Azure
-2026-11-01T15:51:38.3855622Z ##[endgroup]
-2026-11-01T15:51:38.3857326Z ##[group]Operating System
-2026-11-01T15:51:38.3857932Z Ubuntu
-2026-11-01T15:51:38.3858442Z 24.04.5
-2026-11-01T15:51:38.3858993Z LTS
-2026-11-01T15:51:38.3859507Z ##[endgroup]
-2026-11-01T15:51:38.3860052Z ##[group]Runner Image
-2026-11-01T15:51:38.3860673Z Image: ubuntu-24.04
-2026-11-01T15:51:38.3861201Z Version: 20261025.353.1
-2026-11-01T15:51:38.3862479Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261025.353/images/ubuntu/Ubuntu2404-Readme.md
-2026-11-01T15:51:38.3864341Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261025.353
-2026-11-01T15:51:38.3865255Z ##[endgroup]
-2026-11-01T15:51:38.3866363Z ##[group]GITHUB_TOKEN Permissions
-2026-11-01T15:51:38.3868441Z Contents: read
-2026-11-01T15:51:38.3869044Z Metadata: read
-2026-11-01T15:51:38.3869617Z ##[endgroup]
-2026-11-01T15:51:38.3871721Z Secret source: Actions
-2026-11-01T15:51:38.3872741Z Cache mode: write
-2026-11-01T15:51:38.3873646Z Prepare workflow directory
-2026-11-01T15:51:38.4629462Z Prepare all required actions
-2026-11-01T15:51:38.4705399Z Getting action download info
-2026-11-01T15:51:38.7085490Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
-2026-11-01T15:51:38.8076661Z Download action repository 'actions/setup-java@v4' (SHA:cf277c60eb25467037889841efdb72551f06f6c3)
-2026-11-01T15:51:39.3633848Z Download action repository 'gradle/actions@v4' (SHA:ed408507eac070d1f99cc633dbcf757c94c7933a)
-2026-11-01T15:51:40.1498595Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
-2026-11-01T15:51:40.3878191Z Complete job name: Assemble arm64-v8a release
-2026-11-01T15:51:40.4781785Z ##[group]Run actions/checkout@v4
-2026-11-01T15:51:40.4783401Z with:
-2026-11-01T15:51:40.4784344Z   repository: xiaobailong6/MPilot
-2026-11-01T15:51:40.4793304Z   token: ***
-2026-11-01T15:51:40.4794224Z   ssh-strict: true
-2026-11-01T15:51:40.4795147Z   ssh-user: git
-2026-11-01T15:51:40.4796102Z   persist-credentials: true
-2026-11-01T15:51:40.4797130Z   clean: true
-2026-11-01T15:51:40.4798079Z   sparse-checkout-cone-mode: true
-2026-11-01T15:51:40.4799152Z   fetch-depth: 1
-2026-11-01T15:51:40.4800070Z   fetch-tags: false
-2026-11-01T15:51:40.4801010Z   show-progress: true
-2026-11-01T15:51:40.4801974Z   lfs: false
-2026-11-01T15:51:40.4802925Z   submodules: false
-2026-11-01T15:51:40.4803879Z   set-safe-directory: true
-2026-11-01T15:51:40.4804930Z   allow-unsafe-pr-checkout: false
-2026-11-01T15:51:40.4806376Z env:
-2026-11-01T15:51:40.4807241Z   VERSION_CODE: 4
-2026-11-01T15:51:40.4808159Z   VERSION_NAME: 1.0.9.4
-2026-11-01T15:51:40.4809105Z ##[endgroup]
-2026-11-01T15:51:40.7385310Z Syncing repository: xiaobailong6/MPilot
-2026-11-01T15:51:40.7387672Z ##[group]Getting Git version info
-2026-11-01T15:51:40.7388459Z Working directory is '/home/runner/work/MPilot/MPilot'
-2026-11-01T15:51:40.7389766Z [command]/usr/bin/git version
-2026-11-01T15:51:40.7455927Z git version 2.56.0
-2026-11-01T15:51:40.7475376Z ##[endgroup]
-2026-11-01T15:51:40.7489579Z Temporarily overriding HOME='/home/runner/work/_temp/a1e50f51-453a-4e08-a9f9-8d53e878c14b' before making global git config changes
-2026-11-01T15:51:40.7491319Z Adding repository directory to the temporary git global config as a safe directory
-2026-11-01T15:51:40.7494598Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/MPilot/MPilot
-2026-11-01T15:51:40.7541044Z Deleting the contents of '/home/runner/work/MPilot/MPilot'
-2026-11-01T15:51:40.7546451Z ##[group]Initializing the repository
-2026-11-01T15:51:40.7551988Z [command]/usr/bin/git init /home/runner/work/MPilot/MPilot
-2026-11-01T15:51:40.7656842Z hint: Using 'master' as the name for the initial branch. This default branch name
-2026-11-01T15:51:40.7657996Z hint: will change to "main" in Git 3.0. To configure the initial branch name
-2026-11-01T15:51:40.7659017Z hint: to use in all of your new repositories, which will suppress this warning,
-2026-11-01T15:51:40.7659817Z hint: call:
-2026-11-01T15:51:40.7660433Z hint:
-2026-11-01T15:51:40.7661050Z hint: 	git config --global init.defaultBranch <name>
-2026-11-01T15:51:40.7661458Z hint:
-2026-11-01T15:51:40.7661828Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
-2026-11-01T15:51:40.7662373Z hint: 'development'. The just-created branch can be renamed via this command:
-2026-11-01T15:51:40.7662797Z hint:
-2026-11-01T15:51:40.7663338Z hint: 	git branch -m <name>
-2026-11-01T15:51:40.7663632Z hint:
-2026-11-01T15:51:40.7664044Z hint: Disable this message with "git config set advice.defaultBranchName false"
-2026-11-01T15:51:40.7668367Z Initialized empty Git repository in /home/runner/work/MPilot/MPilot/.git/
-2026-11-01T15:51:40.7689098Z [command]/usr/bin/git remote add origin https://github.com/xiaobailong6/MPilot
-2026-11-01T15:51:40.7737049Z ##[endgroup]
-2026-11-01T15:51:40.7738024Z ##[group]Disabling automatic garbage collection
-2026-11-01T15:51:40.7740843Z [command]/usr/bin/git config --local gc.auto 0
-2026-11-01T15:51:40.7772107Z ##[endgroup]
-2026-11-01T15:51:40.7773234Z ##[group]Setting up auth
-2026-11-01T15:51:40.7779258Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
-2026-11-01T15:51:40.7818036Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
-2026-11-01T15:51:40.8152524Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
-2026-11-01T15:51:40.8188223Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
-2026-11-01T15:51:40.8419055Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
-2026-11-01T15:51:40.8453453Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
-2026-11-01T15:51:40.8641922Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
-2026-11-01T15:51:40.8681132Z ##[endgroup]
-2026-11-01T15:51:40.8682056Z ##[group]Fetching the repository
-2026-11-01T15:51:40.8694381Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +3f1f26708a6ddb091e9dc3195eb3130b887f642d:refs/remotes/origin/main
-2026-11-01T15:51:43.9650161Z From https://github.com/xiaobailong6/MPilot
-2026-11-01T15:51:43.9651211Z  * [new ref]         3f1f26708a6ddb091e9dc3195eb3130b887f642d -> origin/main
-2026-11-01T15:51:43.9654230Z ##[endgroup]
-2026-11-01T15:51:43.9655130Z ##[group]Determining the checkout info
-2026-11-01T15:51:43.9657810Z ##[endgroup]
-2026-11-01T15:51:43.9665572Z [command]/usr/bin/git sparse-checkout disable
-2026-11-01T15:51:43.9715897Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
-2026-11-01T15:51:43.9750768Z ##[group]Checking out the ref
-2026-11-01T15:51:43.9764334Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
-2026-11-01T15:51:44.4394717Z Switched to a new branch 'main'
-2026-11-01T15:51:44.4400115Z branch 'main' set up to track 'origin/main'.
-2026-11-01T15:51:44.4443408Z ##[endgroup]
-2026-11-01T15:51:44.4483507Z [command]/usr/bin/git log -1 --format=%H
-2026-11-01T15:51:44.4508198Z 3f1f26708a6ddb091e9dc3195eb3130b887f642d
-2026-11-01T15:51:44.4768264Z ##[group]Run actions/setup-java@v4
-2026-11-01T15:51:44.4768719Z with:
-2026-11-01T15:51:44.4768945Z   distribution: temurin
-2026-11-01T15:51:44.4769183Z   java-version: 17
-2026-11-01T15:51:44.4769407Z   java-package: jdk
-2026-11-01T15:51:44.4769641Z   check-latest: false
-2026-11-01T15:51:44.4769861Z   server-id: github
-2026-11-01T15:51:44.4770084Z   server-username: GITHUB_ACTOR
-2026-11-01T15:51:44.4770354Z   server-password: GITHUB_TOKEN
-2026-11-01T15:51:44.4770618Z   overwrite-settings: true
-2026-11-01T15:51:44.4770858Z   job-status: success
-2026-11-01T15:51:44.4773917Z   token: ***
-2026-11-01T15:51:44.4774134Z env:
-2026-11-01T15:51:44.4774333Z   VERSION_CODE: 4
-2026-11-01T15:51:44.4774565Z   VERSION_NAME: 1.0.9.4
-2026-11-01T15:51:44.4774812Z ##[endgroup]
-2026-11-01T15:51:44.6465181Z ##[warning]setup-java v4 is deprecated and will no longer receive updates. Please migrate to actions/setup-java@v5.
-2026-11-01T15:51:44.6473559Z ##[group]Installed distributions
-2026-11-01T15:51:44.6506992Z Resolved Java 17.0.21+9 from tool-cache
-2026-11-01T15:51:44.6507591Z Setting Java 17.0.21+9 as the default
-2026-11-01T15:51:44.6516778Z (node:2321) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
-2026-11-01T15:51:44.6517976Z (Use `node --trace-deprecation ...` to show where the warning was created)
-2026-11-01T15:51:44.6520550Z Creating toolchains.xml for JDK version 17 from temurin
-2026-11-01T15:51:44.6590357Z Writing to /home/runner/.m2/toolchains.xml
-2026-11-01T15:51:44.6590785Z 
-2026-11-01T15:51:44.6591017Z Java configuration:
-2026-11-01T15:51:44.6591397Z   Distribution: temurin
-2026-11-01T15:51:44.6591832Z   Version: 17.0.21+9
-2026-11-01T15:51:44.6592375Z   Path: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
-2026-11-01T15:51:44.6592834Z 
-2026-11-01T15:51:44.6593406Z ##[endgroup]
-2026-11-01T15:51:44.6611048Z Creating settings.xml with server-id: github
-2026-11-01T15:51:44.6638906Z Writing to /home/runner/.m2/settings.xml
-2026-11-01T15:51:44.6920377Z ##[group]Run gradle/actions/setup-gradle@v4
-2026-11-01T15:51:44.6920945Z with:
-2026-11-01T15:51:44.6921288Z   gradle-version: 8.9
-2026-11-01T15:51:44.6921669Z   cache-disabled: false
-2026-11-01T15:51:44.6922063Z   cache-read-only: false
-2026-11-01T15:51:44.6922472Z   cache-write-only: false
-2026-11-01T15:51:44.6923064Z   cache-overwrite-existing: false
-2026-11-01T15:51:44.6923539Z   cache-cleanup: on-success
-2026-11-01T15:51:44.6924038Z   gradle-home-cache-includes: caches
+﻿2026-11-01T23:43:58.6769188Z Current runner version: '2.338.2'
+2026-11-01T23:43:58.6795600Z ##[group]Runner Image Provisioner
+2026-11-01T23:43:58.6796657Z Hosted Compute Agent
+2026-11-01T23:43:58.6797386Z Version: 20261021.618
+2026-11-01T23:43:58.6798092Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-11-01T23:43:58.6798859Z Build Date: 2026-10-21T00:45:21Z
+2026-11-01T23:43:58.6799684Z Worker ID: {89b25747-bfc9-4991-811d-12f0cabac7c7}
+2026-11-01T23:43:58.6800969Z Region: northcentralus
+2026-11-01T23:43:58.6801710Z Cloud: Azure
+2026-11-01T23:43:58.6802480Z ##[endgroup]
+2026-11-01T23:43:58.6804113Z ##[group]Operating System
+2026-11-01T23:43:58.6804958Z Ubuntu
+2026-11-01T23:43:58.6805528Z 24.04.5
+2026-11-01T23:43:58.6806580Z LTS
+2026-11-01T23:43:58.6807214Z ##[endgroup]
+2026-11-01T23:43:58.6807838Z ##[group]Runner Image
+2026-11-01T23:43:58.6808598Z Image: ubuntu-24.04
+2026-11-01T23:43:58.6809220Z Version: 20261025.353.1
+2026-11-01T23:43:58.6810940Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261025.353/images/ubuntu/Ubuntu2404-Readme.md
+2026-11-01T23:43:58.6812747Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261025.353
+2026-11-01T23:43:58.6813806Z ##[endgroup]
+2026-11-01T23:43:58.6815050Z ##[group]GITHUB_TOKEN Permissions
+2026-11-01T23:43:58.6817255Z Contents: read
+2026-11-01T23:43:58.6817950Z Metadata: read
+2026-11-01T23:43:58.6818747Z ##[endgroup]
+2026-11-01T23:43:58.6821477Z Secret source: Actions
+2026-11-01T23:43:58.6822638Z Cache mode: write
+2026-11-01T23:43:58.6823610Z Prepare workflow directory
+2026-11-01T23:43:58.7413787Z Prepare all required actions
+2026-11-01T23:43:58.7463258Z Getting action download info
+2026-11-01T23:43:59.0166928Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-01T23:43:59.1744834Z Download action repository 'actions/setup-java@v4' (SHA:cf277c60eb25467037889841efdb72551f06f6c3)
+2026-11-01T23:43:59.5506154Z Download action repository 'gradle/actions@v4' (SHA:ed408507eac070d1f99cc633dbcf757c94c7933a)
+2026-11-01T23:44:00.3373134Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-11-01T23:44:00.5847767Z Complete job name: Assemble arm64-v8a release
+2026-11-01T23:44:00.6830638Z ##[group]Run actions/checkout@v4
+2026-11-01T23:44:00.6832097Z with:
+2026-11-01T23:44:00.6833008Z   repository: xiaobailong6/MPilot
+2026-11-01T23:44:00.6843070Z   token: ***
+2026-11-01T23:44:00.6844037Z   ssh-strict: true
+2026-11-01T23:44:00.6845109Z   ssh-user: git
+2026-11-01T23:44:00.6846041Z   persist-credentials: true
+2026-11-01T23:44:00.6847030Z   clean: true
+2026-11-01T23:44:00.6847943Z   sparse-checkout-cone-mode: true
+2026-11-01T23:44:00.6849023Z   fetch-depth: 1
+2026-11-01T23:44:00.6849906Z   fetch-tags: false
+2026-11-01T23:44:00.6851104Z   show-progress: true
+2026-11-01T23:44:00.6852042Z   lfs: false
+2026-11-01T23:44:00.6852929Z   submodules: false
+2026-11-01T23:44:00.6853859Z   set-safe-directory: true
+2026-11-01T23:44:00.6854905Z   allow-unsafe-pr-checkout: false
+2026-11-01T23:44:00.6856397Z env:
+2026-11-01T23:44:00.6857216Z   VERSION_CODE: 6
+2026-11-01T23:44:00.6858093Z   VERSION_NAME: 1.0.9.6
+2026-11-01T23:44:00.6859014Z ##[endgroup]
+2026-11-01T23:44:01.0195628Z Syncing repository: xiaobailong6/MPilot
+2026-11-01T23:44:01.0199536Z ##[group]Getting Git version info
+2026-11-01T23:44:01.0201341Z Working directory is '/home/runner/work/MPilot/MPilot'
+2026-11-01T23:44:01.0204374Z [command]/usr/bin/git version
+2026-11-01T23:44:01.0300001Z git version 2.56.0
+2026-11-01T23:44:01.0323657Z ##[endgroup]
+2026-11-01T23:44:01.0340266Z Temporarily overriding HOME='/home/runner/work/_temp/dd9d6a06-b8a3-42e1-a37d-7242d23f96dc' before making global git config changes
+2026-11-01T23:44:01.0345491Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-01T23:44:01.0349403Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/MPilot/MPilot
+2026-11-01T23:44:01.0408275Z Deleting the contents of '/home/runner/work/MPilot/MPilot'
+2026-11-01T23:44:01.0418761Z ##[group]Initializing the repository
+2026-11-01T23:44:01.0421554Z [command]/usr/bin/git init /home/runner/work/MPilot/MPilot
+2026-11-01T23:44:01.0553891Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-01T23:44:01.0557534Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-01T23:44:01.0560991Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-01T23:44:01.0563633Z hint: call:
+2026-11-01T23:44:01.0564962Z hint:
+2026-11-01T23:44:01.0566654Z hint: 	git config --global init.defaultBranch <name>
+2026-11-01T23:44:01.0568728Z hint:
+2026-11-01T23:44:01.0570929Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-01T23:44:01.0574219Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-01T23:44:01.0576829Z hint:
+2026-11-01T23:44:01.0578260Z hint: 	git branch -m <name>
+2026-11-01T23:44:01.0579832Z hint:
+2026-11-01T23:44:01.0582564Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-01T23:44:01.0586009Z Initialized empty Git repository in /home/runner/work/MPilot/MPilot/.git/
+2026-11-01T23:44:01.0592033Z [command]/usr/bin/git remote add origin https://github.com/xiaobailong6/MPilot
+2026-11-01T23:44:01.0639740Z ##[endgroup]
+2026-11-01T23:44:01.0643135Z ##[group]Disabling automatic garbage collection
+2026-11-01T23:44:01.0645610Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-01T23:44:01.0683127Z ##[endgroup]
+2026-11-01T23:44:01.0685689Z ##[group]Setting up auth
+2026-11-01T23:44:01.0691188Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-01T23:44:01.0737120Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-01T23:44:01.1181641Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-01T23:44:01.1234370Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-01T23:44:01.1477325Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-01T23:44:01.1521631Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-01T23:44:01.1777886Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-01T23:44:01.1831120Z ##[endgroup]
+2026-11-01T23:44:01.1833242Z ##[group]Fetching the repository
+2026-11-01T23:44:01.1848755Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +98d5015c9eecb9c0f66254bbe7dd9ac6891713b2:refs/remotes/origin/main
+2026-11-01T23:44:03.9773333Z From https://github.com/xiaobailong6/MPilot
+2026-11-01T23:44:03.9774848Z  * [new ref]         98d5015c9eecb9c0f66254bbe7dd9ac6891713b2 -> origin/main
+2026-11-01T23:44:03.9778700Z ##[endgroup]
+2026-11-01T23:44:03.9779378Z ##[group]Determining the checkout info
+2026-11-01T23:44:03.9782033Z ##[endgroup]
+2026-11-01T23:44:03.9788021Z [command]/usr/bin/git sparse-checkout disable
+2026-11-01T23:44:03.9851941Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-01T23:44:03.9891514Z ##[group]Checking out the ref
+2026-11-01T23:44:03.9896263Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-11-01T23:44:04.4613069Z Switched to a new branch 'main'
+2026-11-01T23:44:04.4622055Z branch 'main' set up to track 'origin/main'.
+2026-11-01T23:44:04.4689604Z ##[endgroup]
+2026-11-01T23:44:04.4752084Z [command]/usr/bin/git log -1 --format=%H
+2026-11-01T23:44:04.4780356Z 98d5015c9eecb9c0f66254bbe7dd9ac6891713b2
+2026-11-01T23:44:04.5084396Z ##[group]Run actions/setup-java@v4
+2026-11-01T23:44:04.5084936Z with:
+2026-11-01T23:44:04.5085160Z   distribution: temurin
+2026-11-01T23:44:04.5085397Z   java-version: 17
+2026-11-01T23:44:04.5085623Z   java-package: jdk
+2026-11-01T23:44:04.5085844Z   check-latest: false
+2026-11-01T23:44:04.5086063Z   server-id: github
+2026-11-01T23:44:04.5086279Z   server-username: GITHUB_ACTOR
+2026-11-01T23:44:04.5086546Z   server-password: GITHUB_TOKEN
+2026-11-01T23:44:04.5086797Z   overwrite-settings: true
+2026-11-01T23:44:04.5087033Z   job-status: success
+2026-11-01T23:44:04.5089345Z   token: ***
+2026-11-01T23:44:04.5089549Z env:
+2026-11-01T23:44:04.5089746Z   VERSION_CODE: 6
+2026-11-01T23:44:04.5089965Z   VERSION_NAME: 1.0.9.6
+2026-11-01T23:44:04.5090210Z ##[endgroup]
+2026-11-01T23:44:04.6823834Z ##[warning]setup-java v4 is deprecated and will no longer receive updates. Please migrate to actions/setup-java@v5.
+2026-11-01T23:44:04.6831124Z ##[group]Installed distributions
+2026-11-01T23:44:04.6879597Z Resolved Java 17.0.21+9 from tool-cache
+2026-11-01T23:44:04.6880156Z Setting Java 17.0.21+9 as the default
+2026-11-01T23:44:04.6890166Z (node:2316) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-01T23:44:04.6891220Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-01T23:44:04.6894355Z Creating toolchains.xml for JDK version 17 from temurin
+2026-11-01T23:44:04.6971087Z Writing to /home/runner/.m2/toolchains.xml
+2026-11-01T23:44:04.6971802Z 
+2026-11-01T23:44:04.6972039Z Java configuration:
+2026-11-01T23:44:04.6972520Z   Distribution: temurin
+2026-11-01T23:44:04.6972997Z   Version: 17.0.21+9
+2026-11-01T23:44:04.6973638Z   Path: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-01T23:44:04.6974208Z 
+2026-11-01T23:44:04.6974751Z ##[endgroup]
+2026-11-01T23:44:04.6991378Z Creating settings.xml with server-id: github
+2026-11-01T23:44:04.7023292Z Writing to /home/runner/.m2/settings.xml
+2026-11-01T23:44:04.7369012Z ##[group]Run gradle/actions/setup-gradle@v4
+2026-11-01T23:44:04.7369873Z with:
+2026-11-01T23:44:04.7370586Z   gradle-version: 8.9
+2026-11-01T23:44:04.7371186Z   cache-disabled: false
+2026-11-01T23:44:04.7371787Z   cache-read-only: false
+2026-11-01T23:44:04.7372314Z   cache-write-only: false
+2026-11-01T23:44:04.7372748Z   cache-overwrite-existing: false
+2026-11-01T23:44:04.7373211Z   cache-cleanup: on-success
+2026-11-01T23:44:04.7373717Z   gradle-home-cache-includes: caches
 notifications
 
-2026-11-01T15:51:44.6924583Z   add-job-summary: always
-2026-11-01T15:51:44.6925020Z   add-job-summary-as-pr-comment: never
-2026-11-01T15:51:44.6925519Z   dependency-graph: disabled
-2026-11-01T15:51:44.6926063Z   dependency-graph-report-dir: dependency-graph-reports
-2026-11-01T15:51:44.6926710Z   dependency-graph-continue-on-failure: true
-2026-11-01T15:51:44.6927268Z   build-scan-publish: false
-2026-11-01T15:51:44.6927721Z   validate-wrappers: true
-2026-11-01T15:51:44.6928219Z   allow-snapshot-wrappers: false
-2026-11-01T15:51:44.6928675Z   gradle-home-cache-strict-match: false
-2026-11-01T15:51:44.6929165Z   workflow-job-context: null
-2026-11-01T15:51:44.6932656Z   github-token: ***
-2026-11-01T15:51:44.6933101Z env:
-2026-11-01T15:51:44.6933364Z   VERSION_CODE: 4
-2026-11-01T15:51:44.6933588Z   VERSION_NAME: 1.0.9.4
-2026-11-01T15:51:44.6933924Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
-2026-11-01T15:51:44.6934413Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
-2026-11-01T15:51:44.6934789Z ##[endgroup]
-2026-11-01T15:51:45.1261325Z Merged default JDK locations into /home/runner/.m2/toolchains.xml
-2026-11-01T15:51:45.1262465Z Preparing cache for cleanup.
-2026-11-01T15:51:45.1266579Z ##[group]Restore Gradle state from cache
-2026-11-01T15:51:45.2653009Z Cache hit for restore-key: gradle-home-v1|Linux-X64|assemble[c3d13ebf52c079db94adee0bae4f9baa]-5f4eee70f907efdb55a0225776149c3412bbffc7
-2026-11-01T15:51:45.9372191Z Received 10774613 of 10774613 (100.0%), 19.6 MBs/sec
-2026-11-01T15:51:45.9373454Z Cache Size: ~10 MB (10774613 B)
-2026-11-01T15:51:45.9401653Z [command]/usr/bin/tar -xf /home/runner/work/_temp/11ae0565-f9d9-4765-8e1e-f64b6304f016/cache.tzst -P -C /home/runner/work/MPilot/MPilot --use-compress-program unzstd
-2026-11-01T15:51:45.9940605Z Cache restored successfully
-2026-11-01T15:51:45.9949295Z Restored cache entry with key gradle-home-v1|Linux-X64|assemble[a4381a93da7bb0d2b68bcfd157992889]-3f1f26708a6ddb091e9dc3195eb3130b887f642d to /home/runner/.gradle/caches,/home/runner/.gradle/notifications,/home/runner/.gradle/.setup-gradle in 867ms
-2026-11-01T15:51:46.1225068Z Cache hit for: gradle-groovy-dsl-v1-9dbb5374e3e75210ffe387eb5a8203ec
-2026-11-01T15:51:46.1247769Z Cache hit for: gradle-kotlin-dsl-v1-087a2191fc1e31186dd454b386f4e3fc
-2026-11-01T15:51:46.1276511Z Cache hit for: gradle-generated-gradle-jars-v1-26cfecc158c44513d188405a5d2d0d9c
-2026-11-01T15:51:46.1297151Z Cache hit for: gradle-transforms-v1-2edce824358afa0266c0f2ddffd420f9
-2026-11-01T15:51:46.1341341Z Cache hit for: gradle-dependencies-v1-3075ad29fabf4d127e5bcf086059b7fe
-2026-11-01T15:51:46.1363131Z Cache hit for: gradle-instrumented-jars-v1-b11bfafb8d1df63c8c04da30988c8aa0
-2026-11-01T15:51:46.4710334Z Received 90133 of 90133 (100.0%), 0.4 MBs/sec
-2026-11-01T15:51:46.4711001Z Cache Size: ~0 MB (90133 B)
-2026-11-01T15:51:46.4728760Z [command]/usr/bin/tar -xf /home/runner/work/_temp/c28d2199-7803-4118-87b3-aba8ebfa48d9/cache.tzst -P -C /home/runner/work/MPilot/MPilot --use-compress-program unzstd
-2026-11-01T15:51:46.4834313Z Cache restored successfully
-2026-11-01T15:51:46.4836802Z Restored cache entry with key gradle-instrumented-jars-v1-b11bfafb8d1df63c8c04da30988c8aa0 to /home/runner/.gradle/caches/jars-*/*/ in 488ms
-2026-11-01T15:51:46.4854073Z Received 144206 of 144206 (100.0%), 0.6 MBs/sec
-2026-11-01T15:51:46.4854661Z Cache Size: ~0 MB (144206 B)
-2026-11-01T15:51:46.4882080Z [command]/usr/bin/tar -xf /home/runner/work/_temp/fbd42f82-bd13-400b-8a1e-df8f94e65e31/cache.tzst -P -C /home/runner/work/MPilot/MPilot --use-compress-program unzstd
-2026-11-01T15:51:46.4968100Z Received 106497 of 106497 (100.0%), 0.4 MBs/sec
-2026-11-01T15:51:46.4968701Z Cache Size: ~0 MB (106497 B)
-2026-11-01T15:51:46.4995085Z [command]/usr/bin/tar -xf /home/runner/work/_temp/a63786a1-d245-4329-a61b-a0881ecad33e/cache.tzst -P -C /home/runner/work/MPilot/MPilot --use-compress-program unzstd
-2026-11-01T15:51:46.5046730Z Cache restored successfully
-2026-11-01T15:51:46.5056568Z Restored cache entry with key gradle-groovy-dsl-v1-9dbb5374e3e75210ffe387eb5a8203ec to /home/runner/.gradle/caches/*/groovy-dsl/*/ in 509ms
-2026-11-01T15:51:46.5263148Z Cache restored successfully
-2026-11-01T15:51:46.5265545Z Restored cache entry with key gradle-kotlin-dsl-v1-087a2191fc1e31186dd454b386f4e3fc to /home/runner/.gradle/caches/*/kotlin-dsl/accessors/*/,/home/runner/.gradle/caches/*/kotlin-dsl/scripts/*/ in 530ms
-2026-11-01T15:51:46.8639146Z Received 39619897 of 39619897 (100.0%), 64.8 MBs/sec
-2026-11-01T15:51:46.8639683Z Cache Size: ~38 MB (39619897 B)
-2026-11-01T15:51:46.8785232Z [command]/usr/bin/tar -xf /home/runner/work/_temp/2588c8a4-2cc3-4a04-a309-08620493c9ff/cache.tzst -P -C /home/runner/work/MPilot/MPilot --use-compress-program unzstd
-2026-11-01T15:51:47.1984345Z Cache restored successfully
-2026-11-01T15:51:47.2022033Z Restored cache entry with key gradle-generated-gradle-jars-v1-26cfecc158c44513d188405a5d2d0d9c to /home/runner/.gradle/caches/8.9/generated-gradle-jars/gradle-api-8.9.jar in 1206ms
-2026-11-01T15:51:47.2926926Z Received 113246208 of 161036284 (70.3%), 108.0 MBs/sec
-2026-11-01T15:51:47.3020038Z Received 79691776 of 204850868 (38.9%), 76.0 MBs/sec
-2026-11-01T15:51:47.6857516Z Received 161036284 of 161036284 (100.0%), 110.2 MBs/sec
-2026-11-01T15:51:47.6860151Z Cache Size: ~154 MB (161036284 B)
-2026-11-01T15:51:47.7202505Z [command]/usr/bin/tar -xf /home/runner/work/_temp/db9b5d5d-13f1-4b9c-9e98-62d530e3e382/cache.tzst -P -C /home/runner/work/MPilot/MPilot --use-compress-program unzstd
-2026-11-01T15:51:47.9769687Z Received 204850868 of 204850868 (100.0%), 116.6 MBs/sec
-2026-11-01T15:51:47.9771003Z Cache Size: ~195 MB (204850868 B)
-2026-11-01T15:51:47.9795862Z [command]/usr/bin/tar -xf /home/runner/work/_temp/e89a7474-2a00-4f89-ac38-576f0e062502/cache.tzst -P -C /home/runner/work/MPilot/MPilot --use-compress-program unzstd
-2026-11-01T15:51:48.2893646Z Cache restored successfully
-2026-11-01T15:51:48.2996554Z Restored cache entry with key gradle-dependencies-v1-3075ad29fabf4d127e5bcf086059b7fe to /home/runner/.gradle/caches/modules-*/files-*/*/*/*/* in 2304ms
-2026-11-01T15:51:48.6840191Z Cache restored successfully
-2026-11-01T15:51:48.6889980Z Restored cache entry with key gradle-transforms-v1-2edce824358afa0266c0f2ddffd420f9 to /home/runner/.gradle/caches/transforms-4/*/,/home/runner/.gradle/caches/*/transforms/*/ in 2691ms
-2026-11-01T15:51:48.7239701Z ##[endgroup]
-2026-11-01T15:51:48.7323900Z ##[group]All Gradle Wrapper jars are valid
-2026-11-01T15:51:48.7324610Z 
-2026-11-01T15:51:48.7325039Z ##[endgroup]
-2026-11-01T15:51:48.9707921Z ##[group]Provision Gradle 8.9
-2026-11-01T15:51:52.0017443Z Cache hit for: gradle-8.9
-2026-11-01T15:51:53.1838354Z Received 134217728 of 135826040 (98.8%), 125.7 MBs/sec
-2026-11-01T15:51:53.2694141Z Received 135826040 of 135826040 (100.0%), 117.3 MBs/sec
-2026-11-01T15:51:53.2696430Z Cache Size: ~130 MB (135826040 B)
-2026-11-01T15:51:53.2720570Z [command]/usr/bin/tar -xf /home/runner/work/_temp/1763b5db-9123-4d79-b4f6-ee485399000b/cache.tzst -P -C /home/runner/work/MPilot/MPilot --use-compress-program unzstd
-2026-11-01T15:51:53.4178513Z Cache restored successfully
-2026-11-01T15:51:53.4222117Z Restored Gradle distribution gradle-8.9 from cache to /home/runner/work/_temp/.gradle-actions/gradle-installations/downloads/gradle-8.9-bin.zip
-2026-11-01T15:51:53.4238422Z [command]/usr/bin/unzip -o -q /home/runner/work/_temp/.gradle-actions/gradle-installations/downloads/gradle-8.9-bin.zip
-2026-11-01T15:51:54.4079928Z Extracted Gradle 8.9 to /home/runner/work/_temp/.gradle-actions/gradle-installations/installs/gradle-8.9
-2026-11-01T15:51:54.4081606Z Provisioned Gradle executable /home/runner/work/_temp/.gradle-actions/gradle-installations/installs/gradle-8.9/bin/gradle
-2026-11-01T15:51:54.4082820Z ##[endgroup]
-2026-11-01T15:51:54.6077772Z ##[group]Run if [ -n "$KEYSTORE_BASE64" ]; then
-2026-11-01T15:51:54.6078705Z [36;1mif [ -n "$KEYSTORE_BASE64" ]; then[0m
-2026-11-01T15:51:54.6079632Z [36;1m  printf '%s' "$KEYSTORE_BASE64" | base64 -d > keystore.p12[0m
-2026-11-01T15:51:54.6080532Z [36;1m  echo "已使用仓库 Secrets 中的发布密钥"[0m
-2026-11-01T15:51:54.6081207Z [36;1melse[0m
-2026-11-01T15:51:54.6081952Z [36;1m  echo "::warning::MPILOT_KEYSTORE_BASE64 未配置，本次产物退回 debug 签名"[0m
-2026-11-01T15:51:54.6082783Z [36;1mfi[0m
-2026-11-01T15:51:54.6108539Z shell: /usr/bin/bash -e {0}
-2026-11-01T15:51:54.6109026Z env:
-2026-11-01T15:51:54.6109415Z   VERSION_CODE: 4
-2026-11-01T15:51:54.6109875Z   VERSION_NAME: 1.0.9.4
-2026-11-01T15:51:54.6110641Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
-2026-11-01T15:51:54.6111567Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
-2026-11-01T15:51:54.6112475Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
-2026-11-01T15:51:54.6113321Z   GRADLE_USER_HOME: /home/runner/.gradle
-2026-11-01T15:51:54.6113902Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
-2026-11-01T15:51:54.6114537Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
-2026-11-01T15:51:54.6115426Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
-2026-11-01T15:51:54.6116378Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
-2026-11-01T15:51:54.6117038Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
-2026-11-01T15:51:54.6145919Z   KEYSTORE_BASE64: ***
-2026-11-01T15:51:54.6146269Z ##[endgroup]
-2026-11-01T15:51:54.8103882Z base64: invalid input
-2026-11-01T15:51:54.8113593Z ##[error]Process completed with exit code 1.
-2026-11-01T15:51:54.8621229Z Post job cleanup.
-2026-11-01T15:51:55.1082451Z In post-action step
-2026-11-01T15:51:55.1094745Z ##[group]Stopping Gradle daemons
-2026-11-01T15:51:55.1095639Z ##[endgroup]
-2026-11-01T15:51:55.1107979Z ##[group]Provision Gradle >= 8.11
-2026-11-01T15:51:56.0950379Z Cache hit for: gradle-8.11
-2026-11-01T15:51:57.2314255Z Received 117440512 of 136585574 (86.0%), 112.1 MBs/sec
-2026-11-01T15:51:57.4206091Z Received 136585574 of 136585574 (100.0%), 109.5 MBs/sec
-2026-11-01T15:51:57.4209856Z Cache Size: ~130 MB (136585574 B)
-2026-11-01T15:51:57.4252077Z [command]/usr/bin/tar -xf /home/runner/work/_temp/a029546c-dbd9-4781-9ea7-d08acbee631f/cache.tzst -P -C /home/runner/work/MPilot/MPilot --use-compress-program unzstd
-2026-11-01T15:51:57.5723843Z Cache restored successfully
-2026-11-01T15:51:57.5772343Z Restored Gradle distribution gradle-8.11 from cache to /home/runner/work/_temp/.gradle-actions/gradle-installations/downloads/gradle-8.11-bin.zip
-2026-11-01T15:51:57.5789190Z [command]/usr/bin/unzip -o -q /home/runner/work/_temp/.gradle-actions/gradle-installations/downloads/gradle-8.11-bin.zip
-2026-11-01T15:51:58.5552319Z Extracted Gradle 8.11 to /home/runner/work/_temp/.gradle-actions/gradle-installations/installs/gradle-8.11
-2026-11-01T15:51:58.5554610Z Provisioned Gradle executable /home/runner/work/_temp/.gradle-actions/gradle-installations/installs/gradle-8.11/bin/gradle
-2026-11-01T15:51:58.5556269Z ##[endgroup]
-2026-11-01T15:51:58.5563587Z ##[group]Executing Gradle to clean up caches
-2026-11-01T15:51:58.5564432Z Cleaning up caches last used before 1793548305126
-2026-11-01T15:51:58.5567849Z [command]/home/runner/work/_temp/.gradle-actions/gradle-installations/installs/gradle-8.11/bin/gradle -g /home/runner/.gradle -I init.gradle --info --no-daemon --no-scan --build-cache -DGITHUB_DEPENDENCY_GRAPH_ENABLED=false -DGRADLE_ACTIONS_SKIP_BUILD_RESULT_CAPTURE=true noop
-2026-11-01T15:51:59.0318203Z Initialized native services in: /home/runner/.gradle/native
-2026-11-01T15:51:59.0331330Z Initialized jansi services in: /home/runner/.gradle/native
-2026-11-01T15:51:59.2420525Z To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.11/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
-2026-11-01T15:51:59.2446142Z Starting process 'Gradle build daemon'. Working directory: /home/runner/.gradle/daemon/8.11 Command: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-opens=java.base/java.nio.charset=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.xml/javax.xml.namespace=ALL-UNNAMED -XX:MaxMetaspaceSize=384m -XX:+HeapDumpOnOutOfMemoryError -Xms256m -Xmx512m -Dfile.encoding=UTF-8 -Duser.country -Duser.language=en -Duser.variant -cp /home/runner/work/_temp/.gradle-actions/gradle-installations/installs/gradle-8.11/lib/gradle-daemon-main-8.11.jar -javaagent:/home/runner/work/_temp/.gradle-actions/gradle-installations/installs/gradle-8.11/lib/agents/gradle-instrumentation-agent-8.11.jar org.gradle.launcher.daemon.bootstrap.GradleDaemon 8.11
-2026-11-01T15:51:59.2454658Z Successfully started process 'Gradle build daemon'
-2026-11-01T15:52:00.1411743Z An attempt to start the daemon took 0.902 secs.
-2026-11-01T15:52:00.2413444Z The client will now receive all logging from the daemon (pid: 2560). The daemon log file: /home/runner/.gradle/daemon/8.11/daemon-2560.out.log
-2026-11-01T15:52:00.2434026Z Daemon will be stopped at the end of the build 
-2026-11-01T15:52:00.5411120Z Using 4 worker leases.
-2026-11-01T15:52:00.8418466Z Received JVM installation metadata from '/usr/lib/jvm/temurin-17-jdk-amd64': {JAVA_HOME=/usr/lib/jvm/temurin-17-jdk-amd64, JAVA_VERSION=17.0.21, JAVA_VENDOR=Eclipse Adoptium, RUNTIME_NAME=OpenJDK Runtime Environment, RUNTIME_VERSION=17.0.21+9, VM_NAME=OpenJDK 64-Bit Server VM, VM_VERSION=17.0.21+9, VM_VENDOR=Eclipse Adoptium, OS_ARCH=amd64}
-2026-11-01T15:52:01.1411868Z Watching the file system is configured to be enabled if available
-2026-11-01T15:52:01.1413048Z Now considering [/home/runner/work/_temp/dummy-cleanup-project] as hierarchies to watch
-2026-11-01T15:52:01.1413969Z File system watching is active
-2026-11-01T15:52:01.6414507Z Caching disabled for Groovy DSL script compilation (cp_init) because:
-2026-11-01T15:52:01.6434426Z   Build cache is disabled
-2026-11-01T15:52:01.6464411Z   Not worth caching.
-2026-11-01T15:52:01.6469960Z Compiling initialization script '/home/runner/work/_temp/dummy-cleanup-project/init.gradle' using SubsetScriptTransformer.
-2026-11-01T15:52:02.3434676Z Caching disabled for Groovy DSL script compilation (init) because:
-2026-11-01T15:52:02.3436032Z   Build cache is disabled
-2026-11-01T15:52:02.3436831Z   Not worth caching.
-2026-11-01T15:52:02.3438119Z Compiling initialization script '/home/runner/work/_temp/dummy-cleanup-project/init.gradle' using BuildScriptTransformer.
-2026-11-01T15:52:02.9434273Z gradle/actions: Not capturing build results
-2026-11-01T15:52:03.0440584Z Starting Build
-2026-11-01T15:52:03.1414065Z Settings evaluated using settings file '/home/runner/work/_temp/dummy-cleanup-project/settings.gradle'.
-2026-11-01T15:52:03.1425193Z Using local directory build cache for the root build (location = /home/runner/.gradle/caches/build-cache-1, remove unused entries = older than 2026-11-01 15:51:45 UTC).
-2026-11-01T15:52:03.2419639Z Projects loaded. Root project using build file '/home/runner/work/_temp/dummy-cleanup-project/build.gradle'.
-2026-11-01T15:52:03.2422071Z Included projects: [root project 'dummy-cleanup-project']
-2026-11-01T15:52:03.4416303Z 
-2026-11-01T15:52:03.4493241Z > Configure project :
-2026-11-01T15:52:03.4494746Z Evaluating root project 'dummy-cleanup-project' using build file '/home/runner/work/_temp/dummy-cleanup-project/build.gradle'.
-2026-11-01T15:52:03.4496296Z All projects evaluated.
-2026-11-01T15:52:03.4496998Z Task name matched 'noop'
-2026-11-01T15:52:03.4497764Z Selected primary task 'noop' from project :
-2026-11-01T15:52:03.5411594Z Tasks to be executed: [task ':noop']
-2026-11-01T15:52:03.5425345Z Tasks that were excluded: []
-2026-11-01T15:52:03.5434279Z Resolve mutations for :noop (Thread[Execution worker,5,main]) started.
-2026-11-01T15:52:03.5435361Z :noop (Thread[Execution worker,5,main]) started.
-2026-11-01T15:52:03.6410412Z 
-2026-11-01T15:52:03.6411296Z > Task :noop UP-TO-DATE
-2026-11-01T15:52:03.6412139Z Skipping task ':noop' as it has no actions.
-2026-11-01T15:52:03.6412693Z 
-2026-11-01T15:52:03.6413178Z BUILD SUCCESSFUL in 4s
-2026-11-01T15:52:03.6414328Z Build cache (/home/runner/.gradle/caches/build-cache-1) removing files not accessed on or after Sun Nov 01 15:51:45 UTC 2026.
-2026-11-01T15:52:03.6415781Z Build cache (/home/runner/.gradle/caches/build-cache-1) cleanup deleted 19 files/directories.
-2026-11-01T15:52:03.6417135Z Build cache (/home/runner/.gradle/caches/build-cache-1) cleaned up in 0.022 secs.
-2026-11-01T15:52:04.1411201Z groovy-dsl (/home/runner/.gradle/caches/8.11/groovy-dsl) removing files not accessed on or after Sun Nov 01 15:51:45 UTC 2026.
-2026-11-01T15:52:04.2411213Z groovy-dsl (/home/runner/.gradle/caches/8.11/groovy-dsl) cleanup deleted 2 files/directories.
-2026-11-01T15:52:04.2412760Z groovy-dsl (/home/runner/.gradle/caches/8.11/groovy-dsl) cleaned up in 0.009 secs.
-2026-11-01T15:52:04.2418455Z jars (/home/runner/.gradle/caches/jars-9) cleanup deleted 0 files/directories.
-2026-11-01T15:52:04.2419572Z jars (/home/runner/.gradle/caches/jars-9) removing files not accessed on or after Sun Nov 01 15:51:45 UTC 2026.
-2026-11-01T15:52:04.2420570Z jars (/home/runner/.gradle/caches/jars-9) cleanup deleted 9 files/directories.
-2026-11-01T15:52:04.2421808Z jars (/home/runner/.gradle/caches/jars-9) cleaned up in 0.021 secs.
-2026-11-01T15:52:04.2423324Z Artifact transforms cache (/home/runner/.gradle/caches/8.11/transforms) removing files not accessed on or after Sun Nov 01 15:51:45 UTC 2026.
-2026-11-01T15:52:04.2424833Z Artifact transforms cache (/home/runner/.gradle/caches/8.11/transforms) cleanup deleted 0 files/directories.
-2026-11-01T15:52:04.2428161Z Artifact transforms cache (/home/runner/.gradle/caches/8.11/transforms) cleaned up in 0.0 secs.
-2026-11-01T15:52:04.2446644Z dependencies-accessors (/home/runner/.gradle/caches/8.11/dependencies-accessors) removing files not accessed on or after Sun Nov 01 15:51:45 UTC 2026.
-2026-11-01T15:52:04.2464402Z dependencies-accessors (/home/runner/.gradle/caches/8.11/dependencies-accessors) cleanup deleted 0 files/directories.
-2026-11-01T15:52:04.2469178Z dependencies-accessors (/home/runner/.gradle/caches/8.11/dependencies-accessors) cleaned up in 0.0 secs.
-2026-11-01T15:52:04.2470686Z artifact cache (/home/runner/.gradle/caches/modules-2) cleanup deleted 0 files/directories.
-2026-11-01T15:52:04.2472431Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/resources-2.1] cleanup deleted 0 files/directories.
-2026-11-01T15:52:04.2478399Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/resources-2.1] removing files not accessed on or after Sun Nov 01 15:51:45 UTC 2026.
-2026-11-01T15:52:04.2480669Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/resources-2.1] cleanup deleted 0 files/directories.
-2026-11-01T15:52:04.2484334Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/files-2.1] cleanup deleted 0 files/directories.
-2026-11-01T15:52:04.2486517Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/files-2.1] removing files not accessed on or after Sun Nov 01 15:51:45 UTC 2026.
-2026-11-01T15:52:04.3415422Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/files-2.1] cleanup deleted 729 files/directories.
-2026-11-01T15:52:04.4285087Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/metadata-2.107] cleanup deleted 1 files/directories.
-2026-11-01T15:52:04.4305995Z artifact cache (/home/runner/.gradle/caches/modules-2) cleanup deleted 0 files/directories.
-2026-11-01T15:52:04.4307027Z artifact cache (/home/runner/.gradle/caches/modules-2) cleaned up in 0.232 secs.
-2026-11-01T15:52:04.5182761Z ##[endgroup]
-2026-11-01T15:52:04.5183730Z ##[group]Caching Gradle state
-2026-11-01T15:52:04.5568984Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/MPilot/MPilot --files-from manifest.txt --use-compress-program zstdmt
-2026-11-01T15:52:04.5830646Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/MPilot/MPilot --files-from manifest.txt --use-compress-program zstdmt
-2026-11-01T15:52:04.9232330Z Sent 70253 of 70253 (100.0%), 0.3 MBs/sec
-2026-11-01T15:52:04.9910652Z Sent 108599 of 108599 (100.0%), 0.4 MBs/sec
-2026-11-01T15:52:05.0980357Z Saved cache entry with key gradle-instrumented-jars-v1-226358468427a85181d3b55ce7e6c2ee from /home/runner/.gradle/caches/jars-*/*/ in 564ms
-2026-11-01T15:52:05.1149203Z Saved cache entry with key gradle-groovy-dsl-v1-abb0cf965f880bbfe18d01fcf9d21a04 from /home/runner/.gradle/caches/*/groovy-dsl/*/ in 560ms
-2026-11-01T15:52:05.1378446Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/MPilot/MPilot --files-from manifest.txt --use-compress-program zstdmt
-2026-11-01T15:52:05.4956733Z Sent 46737 of 46737 (100.0%), 0.2 MBs/sec
-2026-11-01T15:52:05.6508621Z Saved cache entry with key gradle-home-v1|Linux-X64|assemble[a4381a93da7bb0d2b68bcfd157992889]-3f1f26708a6ddb091e9dc3195eb3130b887f642d from /home/runner/.gradle/caches,/home/runner/.gradle/notifications,/home/runner/.gradle/.setup-gradle in 526ms
-2026-11-01T15:52:05.6510215Z ##[endgroup]
-2026-11-01T15:52:05.6516990Z Generating Job Summary
-2026-11-01T15:52:05.6531285Z Completed post-action step
-2026-11-01T15:52:05.6805550Z Post job cleanup.
-2026-11-01T15:52:05.8147735Z (node:2650) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
-2026-11-01T15:52:05.8148516Z (Use `node --trace-deprecation ...` to show where the warning was created)
-2026-11-01T15:52:05.8308085Z Post job cleanup.
-2026-11-01T15:52:05.9258802Z [command]/usr/bin/git version
-2026-11-01T15:52:05.9308684Z git version 2.56.0
-2026-11-01T15:52:05.9357587Z Temporarily overriding HOME='/home/runner/work/_temp/3870c263-6c33-40e3-9279-dd40b6fd76ba' before making global git config changes
-2026-11-01T15:52:05.9359051Z Adding repository directory to the temporary git global config as a safe directory
-2026-11-01T15:52:05.9364727Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/MPilot/MPilot
-2026-11-01T15:52:05.9407400Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
-2026-11-01T15:52:05.9444063Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
-2026-11-01T15:52:05.9663352Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
-2026-11-01T15:52:05.9691610Z http.https://github.com/.extraheader
-2026-11-01T15:52:05.9704063Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
-2026-11-01T15:52:05.9738233Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
-2026-11-01T15:52:05.9959738Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
-2026-11-01T15:52:05.9999737Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
-2026-11-01T15:52:06.0397911Z Cleaning up orphan processes
-2026-11-01T15:52:06.0701297Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-java@v4, gradle/actions/setup-gradle@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-11-01T23:44:04.7374271Z   add-job-summary: always
+2026-11-01T23:44:04.7374722Z   add-job-summary-as-pr-comment: never
+2026-11-01T23:44:04.7375214Z   dependency-graph: disabled
+2026-11-01T23:44:04.7375744Z   dependency-graph-report-dir: dependency-graph-reports
+2026-11-01T23:44:04.7376403Z   dependency-graph-continue-on-failure: true
+2026-11-01T23:44:04.7376952Z   build-scan-publish: false
+2026-11-01T23:44:04.7377396Z   validate-wrappers: true
+2026-11-01T23:44:04.7377910Z   allow-snapshot-wrappers: false
+2026-11-01T23:44:04.7378432Z   gradle-home-cache-strict-match: false
+2026-11-01T23:44:04.7378957Z   workflow-job-context: null
+2026-11-01T23:44:04.7383567Z   github-token: ***
+2026-11-01T23:44:04.7383964Z env:
+2026-11-01T23:44:04.7384300Z   VERSION_CODE: 6
+2026-11-01T23:44:04.7384662Z   VERSION_NAME: 1.0.9.6
+2026-11-01T23:44:04.7385227Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-01T23:44:04.7386067Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-01T23:44:04.7386718Z ##[endgroup]
+2026-11-01T23:44:05.2254073Z Merged default JDK locations into /home/runner/.m2/toolchains.xml
+2026-11-01T23:44:05.2257234Z Preparing cache for cleanup.
+2026-11-01T23:44:05.2263454Z ##[group]Restore Gradle state from cache
+2026-11-01T23:44:05.3543005Z Cache hit for: gradle-home-v1|Linux-X64|assemble[a4381a93da7bb0d2b68bcfd157992889]-98d5015c9eecb9c0f66254bbe7dd9ac6891713b2
+2026-11-01T23:44:05.6235136Z Received 47040 of 47040 (100.0%), 0.3 MBs/sec
+2026-11-01T23:44:05.6236507Z Cache Size: ~0 MB (47040 B)
+2026-11-01T23:44:05.6273268Z [command]/usr/bin/tar -xf /home/runner/work/_temp/35f57f8f-16f5-4f2c-8ee2-644fbc74966b/cache.tzst -P -C /home/runner/work/MPilot/MPilot --use-compress-program unzstd
+2026-11-01T23:44:05.6350182Z Cache restored successfully
+2026-11-01T23:44:05.6355357Z Restored cache entry with key gradle-home-v1|Linux-X64|assemble[a4381a93da7bb0d2b68bcfd157992889]-98d5015c9eecb9c0f66254bbe7dd9ac6891713b2 to /home/runner/.gradle/caches,/home/runner/.gradle/notifications,/home/runner/.gradle/.setup-gradle in 407ms
+2026-11-01T23:44:05.7313416Z Cache hit for: gradle-instrumented-jars-v1-807f62971944196473d7f6a1510546e1
+2026-11-01T23:44:05.7355865Z Cache hit for: gradle-groovy-dsl-v1-30c62362888b034a0d1100f9aaaf32c6
+2026-11-01T23:44:06.0021984Z Received 108706 of 108706 (100.0%), 0.6 MBs/sec
+2026-11-01T23:44:06.0022777Z Cache Size: ~0 MB (108706 B)
+2026-11-01T23:44:06.0038858Z [command]/usr/bin/tar -xf /home/runner/work/_temp/5c20e2eb-9763-48ee-acc5-2e55ee1d5c0e/cache.tzst -P -C /home/runner/work/MPilot/MPilot --use-compress-program unzstd
+2026-11-01T23:44:06.0072209Z Received 70474 of 70474 (100.0%), 0.4 MBs/sec
+2026-11-01T23:44:06.0073046Z Cache Size: ~0 MB (70474 B)
+2026-11-01T23:44:06.0107769Z [command]/usr/bin/tar -xf /home/runner/work/_temp/553673e6-90b6-4462-8dd0-356ea7b025db/cache.tzst -P -C /home/runner/work/MPilot/MPilot --use-compress-program unzstd
+2026-11-01T23:44:06.0301720Z Cache restored successfully
+2026-11-01T23:44:06.0304332Z Restored cache entry with key gradle-groovy-dsl-v1-30c62362888b034a0d1100f9aaaf32c6 to /home/runner/.gradle/caches/*/groovy-dsl/*/ in 394ms
+2026-11-01T23:44:06.0318322Z Cache restored successfully
+2026-11-01T23:44:06.0319643Z Restored cache entry with key gradle-instrumented-jars-v1-807f62971944196473d7f6a1510546e1 to /home/runner/.gradle/caches/jars-*/*/ in 396ms
+2026-11-01T23:44:06.0387405Z ##[endgroup]
+2026-11-01T23:44:06.0472658Z ##[group]All Gradle Wrapper jars are valid
+2026-11-01T23:44:06.0473311Z 
+2026-11-01T23:44:06.0474046Z ##[endgroup]
+2026-11-01T23:44:06.0989098Z ##[group]Provision Gradle 8.9
+2026-11-01T23:44:07.2298356Z Cache hit for: gradle-8.9
+2026-11-01T23:44:08.3292878Z Received 134217728 of 135826040 (98.8%), 127.9 MBs/sec
+2026-11-01T23:44:08.3447920Z Received 135826040 of 135826040 (100.0%), 127.5 MBs/sec
+2026-11-01T23:44:08.3448839Z Cache Size: ~130 MB (135826040 B)
+2026-11-01T23:44:08.3467950Z [command]/usr/bin/tar -xf /home/runner/work/_temp/193bbfd9-d095-4817-a299-cad73d34fbdb/cache.tzst -P -C /home/runner/work/MPilot/MPilot --use-compress-program unzstd
+2026-11-01T23:44:08.5364866Z Cache restored successfully
+2026-11-01T23:44:08.5422552Z Restored Gradle distribution gradle-8.9 from cache to /home/runner/work/_temp/.gradle-actions/gradle-installations/downloads/gradle-8.9-bin.zip
+2026-11-01T23:44:08.5442773Z [command]/usr/bin/unzip -o -q /home/runner/work/_temp/.gradle-actions/gradle-installations/downloads/gradle-8.9-bin.zip
+2026-11-01T23:44:09.5219605Z Extracted Gradle 8.9 to /home/runner/work/_temp/.gradle-actions/gradle-installations/installs/gradle-8.9
+2026-11-01T23:44:09.5222132Z Provisioned Gradle executable /home/runner/work/_temp/.gradle-actions/gradle-installations/installs/gradle-8.9/bin/gradle
+2026-11-01T23:44:09.5223564Z ##[endgroup]
+2026-11-01T23:44:09.5514795Z ##[group]Run set -euo pipefail
+2026-11-01T23:44:09.5515208Z [36;1mset -euo pipefail[0m
+2026-11-01T23:44:09.5515529Z [36;1mif [ -z "$KEYSTORE_BASE64" ]; then[0m
+2026-11-01T23:44:09.5515964Z [36;1m  echo "::warning::MPILOT_KEYSTORE_BASE64 未配置，本次产物退回 debug 签名"[0m
+2026-11-01T23:44:09.5516354Z [36;1m  exit 0[0m
+2026-11-01T23:44:09.5516576Z [36;1mfi[0m
+2026-11-01T23:44:09.5516925Z [36;1mprintf '%s' "$KEYSTORE_BASE64" | tr -d '[:space:]' > keystore.b64.clean[0m
+2026-11-01T23:44:09.5517405Z [36;1mbase64 -d keystore.b64.clean > keystore.p12[0m
+2026-11-01T23:44:09.5517749Z [36;1mrm keystore.b64.clean[0m
+2026-11-01T23:44:09.5518038Z [36;1msize=$(wc -c < keystore.p12)[0m
+2026-11-01T23:44:09.5518341Z [36;1mif [ "$size" -lt 100 ]; then[0m
+2026-11-01T23:44:09.5518719Z [36;1m  echo "::error::解码后的 keystore 只有 $size 字节，Secret 内容可能不完整"[0m
+2026-11-01T23:44:09.5519284Z [36;1m  exit 1[0m
+2026-11-01T23:44:09.5519503Z [36;1mfi[0m
+2026-11-01T23:44:09.5519774Z [36;1mecho "已解码发布密钥（$size 字节）"[0m
+2026-11-01T23:44:09.5543557Z shell: /usr/bin/bash -e {0}
+2026-11-01T23:44:09.5543843Z env:
+2026-11-01T23:44:09.5544060Z   VERSION_CODE: 6
+2026-11-01T23:44:09.5544297Z   VERSION_NAME: 1.0.9.6
+2026-11-01T23:44:09.5544666Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-01T23:44:09.5545209Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-01T23:44:09.5545663Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-11-01T23:44:09.5546002Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-11-01T23:44:09.5546323Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-11-01T23:44:09.5546647Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-11-01T23:44:09.5547112Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-11-01T23:44:09.5547636Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-11-01T23:44:09.5547984Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-11-01T23:44:09.5567822Z   KEYSTORE_BASE64: ***
+2026-11-01T23:44:09.5568098Z ##[endgroup]
+2026-11-01T23:44:09.5667220Z base64: invalid input
+2026-11-01T23:44:09.5675977Z ##[error]Process completed with exit code 1.
+2026-11-01T23:44:09.5871531Z Post job cleanup.
+2026-11-01T23:44:09.8325149Z In post-action step
+2026-11-01T23:44:09.8335033Z ##[group]Stopping Gradle daemons
+2026-11-01T23:44:09.8336525Z ##[endgroup]
+2026-11-01T23:44:09.8348172Z ##[group]Provision Gradle >= 8.11
+2026-11-01T23:44:10.7151307Z Cache hit for: gradle-8.11
+2026-11-01T23:44:11.8354630Z Received 134217728 of 136585574 (98.3%), 126.1 MBs/sec
+2026-11-01T23:44:11.9273262Z Received 136585574 of 136585574 (100.0%), 117.7 MBs/sec
+2026-11-01T23:44:11.9278018Z Cache Size: ~130 MB (136585574 B)
+2026-11-01T23:44:11.9428669Z [command]/usr/bin/tar -xf /home/runner/work/_temp/7f3a3c84-7a7e-4c09-8d51-157ba8e23a64/cache.tzst -P -C /home/runner/work/MPilot/MPilot --use-compress-program unzstd
+2026-11-01T23:44:12.1462029Z Cache restored successfully
+2026-11-01T23:44:12.1526748Z Restored Gradle distribution gradle-8.11 from cache to /home/runner/work/_temp/.gradle-actions/gradle-installations/downloads/gradle-8.11-bin.zip
+2026-11-01T23:44:12.1544928Z [command]/usr/bin/unzip -o -q /home/runner/work/_temp/.gradle-actions/gradle-installations/downloads/gradle-8.11-bin.zip
+2026-11-01T23:44:13.1280203Z Extracted Gradle 8.11 to /home/runner/work/_temp/.gradle-actions/gradle-installations/installs/gradle-8.11
+2026-11-01T23:44:13.1282825Z Provisioned Gradle executable /home/runner/work/_temp/.gradle-actions/gradle-installations/installs/gradle-8.11/bin/gradle
+2026-11-01T23:44:13.1284566Z ##[endgroup]
+2026-11-01T23:44:13.1291539Z ##[group]Executing Gradle to clean up caches
+2026-11-01T23:44:13.1292549Z Cleaning up caches last used before 1793576645225
+2026-11-01T23:44:13.1296524Z [command]/home/runner/work/_temp/.gradle-actions/gradle-installations/installs/gradle-8.11/bin/gradle -g /home/runner/.gradle -I init.gradle --info --no-daemon --no-scan --build-cache -DGITHUB_DEPENDENCY_GRAPH_ENABLED=false -DGRADLE_ACTIONS_SKIP_BUILD_RESULT_CAPTURE=true noop
+2026-11-01T23:44:13.6188281Z Initialized native services in: /home/runner/.gradle/native
+2026-11-01T23:44:13.6221406Z Initialized jansi services in: /home/runner/.gradle/native
+2026-11-01T23:44:13.8312162Z To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.11/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+2026-11-01T23:44:13.8341440Z Starting process 'Gradle build daemon'. Working directory: /home/runner/.gradle/daemon/8.11 Command: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-opens=java.base/java.nio.charset=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.xml/javax.xml.namespace=ALL-UNNAMED -XX:MaxMetaspaceSize=384m -XX:+HeapDumpOnOutOfMemoryError -Xms256m -Xmx512m -Dfile.encoding=UTF-8 -Duser.country -Duser.language=en -Duser.variant -cp /home/runner/work/_temp/.gradle-actions/gradle-installations/installs/gradle-8.11/lib/gradle-daemon-main-8.11.jar -javaagent:/home/runner/work/_temp/.gradle-actions/gradle-installations/installs/gradle-8.11/lib/agents/gradle-instrumentation-agent-8.11.jar org.gradle.launcher.daemon.bootstrap.GradleDaemon 8.11
+2026-11-01T23:44:13.9298627Z Successfully started process 'Gradle build daemon'
+2026-11-01T23:44:14.9341558Z An attempt to start the daemon took 1.033 secs.
+2026-11-01T23:44:15.0304663Z The client will now receive all logging from the daemon (pid: 2531). The daemon log file: /home/runner/.gradle/daemon/8.11/daemon-2531.out.log
+2026-11-01T23:44:15.0306266Z Daemon will be stopped at the end of the build 
+2026-11-01T23:44:15.3295696Z Using 4 worker leases.
+2026-11-01T23:44:15.5303354Z Received JVM installation metadata from '/usr/lib/jvm/temurin-17-jdk-amd64': {JAVA_HOME=/usr/lib/jvm/temurin-17-jdk-amd64, JAVA_VERSION=17.0.21, JAVA_VENDOR=Eclipse Adoptium, RUNTIME_NAME=OpenJDK Runtime Environment, RUNTIME_VERSION=17.0.21+9, VM_NAME=OpenJDK 64-Bit Server VM, VM_VERSION=17.0.21+9, VM_VENDOR=Eclipse Adoptium, OS_ARCH=amd64}
+2026-11-01T23:44:15.8312124Z Watching the file system is configured to be enabled if available
+2026-11-01T23:44:15.8313806Z Now considering [/home/runner/work/_temp/dummy-cleanup-project] as hierarchies to watch
+2026-11-01T23:44:15.8316528Z File system watching is active
+2026-11-01T23:44:16.3298271Z Caching disabled for Groovy DSL script compilation (cp_init) because:
+2026-11-01T23:44:16.3299501Z   Build cache is disabled
+2026-11-01T23:44:16.3300142Z   Not worth caching.
+2026-11-01T23:44:16.3301578Z Compiling initialization script '/home/runner/work/_temp/dummy-cleanup-project/init.gradle' using SubsetScriptTransformer.
+2026-11-01T23:44:17.0331819Z Caching disabled for Groovy DSL script compilation (init) because:
+2026-11-01T23:44:17.0361014Z   Build cache is disabled
+2026-11-01T23:44:17.0361742Z   Not worth caching.
+2026-11-01T23:44:17.0382350Z Compiling initialization script '/home/runner/work/_temp/dummy-cleanup-project/init.gradle' using BuildScriptTransformer.
+2026-11-01T23:44:18.0306368Z gradle/actions: Not capturing build results
+2026-11-01T23:44:18.1295417Z Starting Build
+2026-11-01T23:44:18.2295582Z Settings evaluated using settings file '/home/runner/work/_temp/dummy-cleanup-project/settings.gradle'.
+2026-11-01T23:44:18.2301083Z Using local directory build cache for the root build (location = /home/runner/.gradle/caches/build-cache-1, remove unused entries = older than 2026-11-01 23:44:05 UTC).
+2026-11-01T23:44:18.3296028Z Projects loaded. Root project using build file '/home/runner/work/_temp/dummy-cleanup-project/build.gradle'.
+2026-11-01T23:44:18.3298452Z Included projects: [root project 'dummy-cleanup-project']
+2026-11-01T23:44:18.6298669Z 
+2026-11-01T23:44:18.6345623Z > Configure project :
+2026-11-01T23:44:18.6347402Z Evaluating root project 'dummy-cleanup-project' using build file '/home/runner/work/_temp/dummy-cleanup-project/build.gradle'.
+2026-11-01T23:44:18.6372486Z All projects evaluated.
+2026-11-01T23:44:18.6379953Z Task name matched 'noop'
+2026-11-01T23:44:18.6391415Z Selected primary task 'noop' from project :
+2026-11-01T23:44:18.6392030Z Tasks to be executed: [task ':noop']
+2026-11-01T23:44:18.6392565Z Tasks that were excluded: []
+2026-11-01T23:44:18.6393241Z Resolve mutations for :noop (Thread[Execution worker,5,main]) started.
+2026-11-01T23:44:18.7301826Z :noop (Thread[Execution worker,5,main]) started.
+2026-11-01T23:44:18.7330083Z 
+2026-11-01T23:44:18.7330777Z > Task :noop UP-TO-DATE
+2026-11-01T23:44:18.7331471Z Skipping task ':noop' as it has no actions.
+2026-11-01T23:44:18.7331979Z 
+2026-11-01T23:44:18.7332403Z BUILD SUCCESSFUL in 5s
+2026-11-01T23:44:18.7333439Z Build cache (/home/runner/.gradle/caches/build-cache-1) removing files not accessed on or after Sun Nov 01 23:44:05 UTC 2026.
+2026-11-01T23:44:18.7334799Z Build cache (/home/runner/.gradle/caches/build-cache-1) cleanup deleted 0 files/directories.
+2026-11-01T23:44:18.7336129Z Build cache (/home/runner/.gradle/caches/build-cache-1) cleaned up in 0.003 secs.
+2026-11-01T23:44:18.7850068Z groovy-dsl (/home/runner/.gradle/caches/8.11/groovy-dsl) removing files not accessed on or after Sun Nov 01 23:44:05 UTC 2026.
+2026-11-01T23:44:18.7876614Z groovy-dsl (/home/runner/.gradle/caches/8.11/groovy-dsl) cleanup deleted 2 files/directories.
+2026-11-01T23:44:18.7878222Z groovy-dsl (/home/runner/.gradle/caches/8.11/groovy-dsl) cleaned up in 0.013 secs.
+2026-11-01T23:44:18.7886654Z jars (/home/runner/.gradle/caches/jars-9) cleanup deleted 0 files/directories.
+2026-11-01T23:44:18.7888257Z jars (/home/runner/.gradle/caches/jars-9) removing files not accessed on or after Sun Nov 01 23:44:05 UTC 2026.
+2026-11-01T23:44:18.7889654Z jars (/home/runner/.gradle/caches/jars-9) cleanup deleted 1 files/directories.
+2026-11-01T23:44:18.7891429Z jars (/home/runner/.gradle/caches/jars-9) cleaned up in 0.004 secs.
+2026-11-01T23:44:18.7893120Z Artifact transforms cache (/home/runner/.gradle/caches/8.11/transforms) removing files not accessed on or after Sun Nov 01 23:44:05 UTC 2026.
+2026-11-01T23:44:18.7895023Z Artifact transforms cache (/home/runner/.gradle/caches/8.11/transforms) cleanup deleted 0 files/directories.
+2026-11-01T23:44:18.7896651Z Artifact transforms cache (/home/runner/.gradle/caches/8.11/transforms) cleaned up in 0.0 secs.
+2026-11-01T23:44:18.7898575Z dependencies-accessors (/home/runner/.gradle/caches/8.11/dependencies-accessors) removing files not accessed on or after Sun Nov 01 23:44:05 UTC 2026.
+2026-11-01T23:44:18.7901011Z dependencies-accessors (/home/runner/.gradle/caches/8.11/dependencies-accessors) cleanup deleted 0 files/directories.
+2026-11-01T23:44:18.7902839Z dependencies-accessors (/home/runner/.gradle/caches/8.11/dependencies-accessors) cleaned up in 0.0 secs.
+2026-11-01T23:44:18.7904461Z artifact cache (/home/runner/.gradle/caches/modules-2) cleanup deleted 0 files/directories.
+2026-11-01T23:44:18.7906212Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/resources-2.1] cleanup deleted 0 files/directories.
+2026-11-01T23:44:18.7908501Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/resources-2.1] removing files not accessed on or after Sun Nov 01 23:44:05 UTC 2026.
+2026-11-01T23:44:18.7911060Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/resources-2.1] cleanup deleted 0 files/directories.
+2026-11-01T23:44:18.7913216Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/files-2.1] cleanup deleted 0 files/directories.
+2026-11-01T23:44:18.7915477Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/files-2.1] removing files not accessed on or after Sun Nov 01 23:44:05 UTC 2026.
+2026-11-01T23:44:18.7917692Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/files-2.1] cleanup deleted 0 files/directories.
+2026-11-01T23:44:18.7919768Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/metadata-2.107] cleanup deleted 0 files/directories.
+2026-11-01T23:44:18.7922377Z artifact cache (/home/runner/.gradle/caches/modules-2) cleanup deleted 0 files/directories.
+2026-11-01T23:44:18.7924116Z artifact cache (/home/runner/.gradle/caches/modules-2) cleaned up in 0.003 secs.
+2026-11-01T23:44:18.9228316Z ##[endgroup]
+2026-11-01T23:44:18.9228850Z ##[group]Caching Gradle state
+2026-11-01T23:44:18.9238137Z Cache hit occurred on the cache key gradle-home-v1|Linux-X64|assemble[a4381a93da7bb0d2b68bcfd157992889]-98d5015c9eecb9c0f66254bbe7dd9ac6891713b2, not saving cache.
+2026-11-01T23:44:18.9239158Z ##[endgroup]
+2026-11-01T23:44:18.9247210Z Generating Job Summary
+2026-11-01T23:44:18.9262653Z Completed post-action step
+2026-11-01T23:44:18.9524240Z Post job cleanup.
+2026-11-01T23:44:19.0909326Z (node:2595) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-01T23:44:19.0910670Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-01T23:44:19.1121018Z Post job cleanup.
+2026-11-01T23:44:19.2135986Z [command]/usr/bin/git version
+2026-11-01T23:44:19.2185222Z git version 2.56.0
+2026-11-01T23:44:19.2231109Z Temporarily overriding HOME='/home/runner/work/_temp/4742f9da-8326-4bc2-b330-1e063cbc8546' before making global git config changes
+2026-11-01T23:44:19.2232588Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-01T23:44:19.2237704Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/MPilot/MPilot
+2026-11-01T23:44:19.2281650Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-01T23:44:19.2347241Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-01T23:44:19.2623366Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-01T23:44:19.2656085Z http.https://github.com/.extraheader
+2026-11-01T23:44:19.2669262Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-01T23:44:19.2707549Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-01T23:44:19.2973679Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-01T23:44:19.3026410Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-01T23:44:19.3433141Z Cleaning up orphan processes
+2026-11-01T23:44:19.3801735Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-java@v4, gradle/actions/setup-gradle@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

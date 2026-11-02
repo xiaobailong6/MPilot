@@ -1,0 +1,76 @@
+﻿2026-11-01T23:44:00.6830605Z ##[group]Run actions/checkout@v4
+2026-11-01T23:44:00.6832087Z with:
+2026-11-01T23:44:00.6833004Z   repository: xiaobailong6/MPilot
+2026-11-01T23:44:00.6843046Z   token: ***
+2026-11-01T23:44:00.6844032Z   ssh-strict: true
+2026-11-01T23:44:00.6845104Z   ssh-user: git
+2026-11-01T23:44:00.6846036Z   persist-credentials: true
+2026-11-01T23:44:00.6847026Z   clean: true
+2026-11-01T23:44:00.6847939Z   sparse-checkout-cone-mode: true
+2026-11-01T23:44:00.6849019Z   fetch-depth: 1
+2026-11-01T23:44:00.6849902Z   fetch-tags: false
+2026-11-01T23:44:00.6851096Z   show-progress: true
+2026-11-01T23:44:00.6852034Z   lfs: false
+2026-11-01T23:44:00.6852893Z   submodules: false
+2026-11-01T23:44:00.6853855Z   set-safe-directory: true
+2026-11-01T23:44:00.6854900Z   allow-unsafe-pr-checkout: false
+2026-11-01T23:44:00.6856386Z env:
+2026-11-01T23:44:00.6857212Z   VERSION_CODE: 6
+2026-11-01T23:44:00.6858088Z   VERSION_NAME: 1.0.9.6
+2026-11-01T23:44:00.6859010Z ##[endgroup]
+2026-11-01T23:44:01.0195450Z Syncing repository: xiaobailong6/MPilot
+2026-11-01T23:44:01.0199512Z ##[group]Getting Git version info
+2026-11-01T23:44:01.0201329Z Working directory is '/home/runner/work/MPilot/MPilot'
+2026-11-01T23:44:01.0204361Z [command]/usr/bin/git version
+2026-11-01T23:44:01.0299965Z git version 2.56.0
+2026-11-01T23:44:01.0323631Z ##[endgroup]
+2026-11-01T23:44:01.0340232Z Temporarily overriding HOME='/home/runner/work/_temp/dd9d6a06-b8a3-42e1-a37d-7242d23f96dc' before making global git config changes
+2026-11-01T23:44:01.0345477Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-01T23:44:01.0349392Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/MPilot/MPilot
+2026-11-01T23:44:01.0408244Z Deleting the contents of '/home/runner/work/MPilot/MPilot'
+2026-11-01T23:44:01.0418737Z ##[group]Initializing the repository
+2026-11-01T23:44:01.0421528Z [command]/usr/bin/git init /home/runner/work/MPilot/MPilot
+2026-11-01T23:44:01.0553755Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-01T23:44:01.0557519Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-01T23:44:01.0560973Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-01T23:44:01.0563622Z hint: call:
+2026-11-01T23:44:01.0564954Z hint:
+2026-11-01T23:44:01.0566643Z hint: 	git config --global init.defaultBranch <name>
+2026-11-01T23:44:01.0568720Z hint:
+2026-11-01T23:44:01.0570915Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-01T23:44:01.0574209Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-01T23:44:01.0576820Z hint:
+2026-11-01T23:44:01.0578250Z hint: 	git branch -m <name>
+2026-11-01T23:44:01.0579824Z hint:
+2026-11-01T23:44:01.0582547Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-01T23:44:01.0585998Z Initialized empty Git repository in /home/runner/work/MPilot/MPilot/.git/
+2026-11-01T23:44:01.0591994Z [command]/usr/bin/git remote add origin https://github.com/xiaobailong6/MPilot
+2026-11-01T23:44:01.0639705Z ##[endgroup]
+2026-11-01T23:44:01.0643101Z ##[group]Disabling automatic garbage collection
+2026-11-01T23:44:01.0645579Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-01T23:44:01.0683089Z ##[endgroup]
+2026-11-01T23:44:01.0685662Z ##[group]Setting up auth
+2026-11-01T23:44:01.0691156Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-01T23:44:01.0737080Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-01T23:44:01.1181508Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-01T23:44:01.1233860Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-01T23:44:01.1477275Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-01T23:44:01.1521583Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-01T23:44:01.1777821Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-01T23:44:01.1831079Z ##[endgroup]
+2026-11-01T23:44:01.1833224Z ##[group]Fetching the repository
+2026-11-01T23:44:01.1848717Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +98d5015c9eecb9c0f66254bbe7dd9ac6891713b2:refs/remotes/origin/main
+2026-11-01T23:44:03.9773266Z From https://github.com/xiaobailong6/MPilot
+2026-11-01T23:44:03.9774808Z  * [new ref]         98d5015c9eecb9c0f66254bbe7dd9ac6891713b2 -> origin/main
+2026-11-01T23:44:03.9778683Z ##[endgroup]
+2026-11-01T23:44:03.9779346Z ##[group]Determining the checkout info
+2026-11-01T23:44:03.9782004Z ##[endgroup]
+2026-11-01T23:44:03.9788005Z [command]/usr/bin/git sparse-checkout disable
+2026-11-01T23:44:03.9851918Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-01T23:44:03.9891482Z ##[group]Checking out the ref
+2026-11-01T23:44:03.9896229Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-11-01T23:44:04.4612994Z Switched to a new branch 'main'
+2026-11-01T23:44:04.4622031Z branch 'main' set up to track 'origin/main'.
+2026-11-01T23:44:04.4689583Z ##[endgroup]
+2026-11-01T23:44:04.4752062Z [command]/usr/bin/git log -1 --format=%H
+2026-11-01T23:44:04.4780310Z 98d5015c9eecb9c0f66254bbe7dd9ac6891713b2

@@ -1,0 +1,33 @@
+﻿2026-11-01T23:44:04.5084373Z ##[group]Run actions/setup-java@v4
+2026-11-01T23:44:04.5084929Z with:
+2026-11-01T23:44:04.5085156Z   distribution: temurin
+2026-11-01T23:44:04.5085394Z   java-version: 17
+2026-11-01T23:44:04.5085611Z   java-package: jdk
+2026-11-01T23:44:04.5085841Z   check-latest: false
+2026-11-01T23:44:04.5086060Z   server-id: github
+2026-11-01T23:44:04.5086276Z   server-username: GITHUB_ACTOR
+2026-11-01T23:44:04.5086543Z   server-password: GITHUB_TOKEN
+2026-11-01T23:44:04.5086794Z   overwrite-settings: true
+2026-11-01T23:44:04.5087030Z   job-status: success
+2026-11-01T23:44:04.5089341Z   token: ***
+2026-11-01T23:44:04.5089545Z env:
+2026-11-01T23:44:04.5089743Z   VERSION_CODE: 6
+2026-11-01T23:44:04.5089961Z   VERSION_NAME: 1.0.9.6
+2026-11-01T23:44:04.5090206Z ##[endgroup]
+2026-11-01T23:44:04.6823793Z ##[warning]setup-java v4 is deprecated and will no longer receive updates. Please migrate to actions/setup-java@v5.
+2026-11-01T23:44:04.6831109Z ##[group]Installed distributions
+2026-11-01T23:44:04.6879506Z Resolved Java 17.0.21+9 from tool-cache
+2026-11-01T23:44:04.6880149Z Setting Java 17.0.21+9 as the default
+2026-11-01T23:44:04.6890147Z (node:2316) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-01T23:44:04.6891212Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-01T23:44:04.6894343Z Creating toolchains.xml for JDK version 17 from temurin
+2026-11-01T23:44:04.6971066Z Writing to /home/runner/.m2/toolchains.xml
+2026-11-01T23:44:04.6971786Z 
+2026-11-01T23:44:04.6972032Z Java configuration:
+2026-11-01T23:44:04.6972513Z   Distribution: temurin
+2026-11-01T23:44:04.6972991Z   Version: 17.0.21+9
+2026-11-01T23:44:04.6973631Z   Path: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-01T23:44:04.6974202Z 
+2026-11-01T23:44:04.6974745Z ##[endgroup]
+2026-11-01T23:44:04.6991358Z Creating settings.xml with server-id: github
+2026-11-01T23:44:04.7023272Z Writing to /home/runner/.m2/settings.xml
