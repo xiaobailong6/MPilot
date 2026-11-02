@@ -65,7 +65,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
@@ -102,10 +101,8 @@ import org.moviepilot.android.web.WebCoordinator
  * 原生外壳：顶栏、页内标签、底部入口、WebView 与恢复页。
  *
  * 三条与 iOS 不同的落地约定（Android 侧没有系统级等价物）：
- * 1. **液态玻璃用"分层材质 + 边缘光 + 光晕"逼近**：Android 没有 backdrop blur，
- *    无法把 WebView 的内容真模糊到 bar 下面；这里改用半透明分层渐变（厚/薄两种材质）、
- *    accent 光晕（`Modifier.blur` 真实模糊，API 31+ 生效）、顶部亮/底部暗的边缘光描边、
- *    以及 18dp 投影，做出"漂浮在页面之上的玻璃片"的观感。
+ * 1. **玻璃底栏覆盖网页**：局部采样 WebView 作为磨砂背景；顶部保持透明，
+ *    只在胶囊内部绘制材质，不再保留整条矩形底板。
  * 2. **排版不写死高度**：一律 `heightIn(min = …)`，标题/标签单行省略，
  *    页内标签横向可滚动，动作按屏宽收放 —— 系统大字体下不会再截断。
  * 3. **WebView 始终固定在同一层级**：它一旦跨 Window 或换父容器就会白屏/重载，
@@ -131,9 +128,17 @@ fun ShellScreen(
     var loading by remember { mutableStateOf(true) }
     var prepareRequested by remember { mutableStateOf(false) }
     var viewport by remember { mutableStateOf(IntSize.Zero) }
+    var topHeight by remember { mutableStateOf(0) }
+    var bottomHeight by remember { mutableStateOf(0) }
 
     DisposableEffect(coordinator) {
-        coordinator.layoutProvider = { revision -> shellLayoutPayload(revision, viewport, density) }
+        coordinator.layoutProvider = { revision ->
+            shellLayoutPayload(
+                revision, viewport, density,
+                if (snapshot?.chrome?.topVisible == true) topHeight else 0,
+                if (snapshot?.let { it.chrome.bottomVisible && it.roots.isNotEmpty() } == true) bottomHeight else 0,
+            )
+        }
         coordinator.onSnapshot = { value -> snapshot = value }
         coordinator.onRecovery = { message -> recovery = message }
         coordinator.onLoadingChanged = { value -> loading = value }
@@ -169,7 +174,11 @@ fun ShellScreen(
         coordinator.completePrepare()
     }
 
-    LaunchedEffect(coordinator, viewport) {
+    val topVisible = snapshot?.chrome?.topVisible == true
+    val bottomVisible = snapshot?.let { it.chrome.bottomVisible && it.roots.isNotEmpty() } == true
+    LaunchedEffect(coordinator, viewport, topHeight, bottomHeight, topVisible, bottomVisible) {
+        if (!topVisible) topHeight = 0
+        if (!bottomVisible) bottomHeight = 0
         if (viewport == IntSize.Zero) return@LaunchedEffect
         withFrameNanos { }
         coordinator.layoutChanged()
@@ -196,9 +205,22 @@ fun ShellScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
-        Column(modifier = Modifier.fillMaxSize().safeDrawingPadding().imePadding()) {
+        Box(modifier = Modifier.fillMaxSize().safeDrawingPadding().imePadding()) {
+            // 网页先铺满，再叠放浮层；胶囊四周直接透出网页，不绘制占位底板。
+            androidx.compose.runtime.key(coordinator.webView) {
+                AndroidView(
+                    factory = { coordinator.webView },
+                    modifier = Modifier.fillMaxSize().onSizeChanged { viewport = it },
+                )
+            }
+            Box(
+                modifier = Modifier.fillMaxSize()
+                    .graphicsLayer { alpha = pageScrim.value }
+                    .background(MaterialTheme.colorScheme.background),
+            )
             AnimatedVisibility(
-                visible = current != null && chrome != null && chrome.topVisible,
+                modifier = Modifier.align(Alignment.TopCenter).onSizeChanged { topHeight = it.height },
+                visible = topVisible,
                 enter = fadeIn(tween(160)) + slideInVertically(tween(200)) { -it },
                 exit = fadeOut(tween(120)) + slideOutVertically(tween(160)) { -it },
             ) {
@@ -215,25 +237,9 @@ fun ShellScreen(
                 }
             }
 
-            Box(modifier = Modifier.fillMaxWidth().weight(1f)) {
-                AndroidView(
-                    factory = { coordinator.webView },
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .onSizeChanged { size -> viewport = size },
-                )
-                // 过渡遮罩：只覆盖在 WebView 之上，不触碰 WebView 自身（避免重绘问题）。
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .graphicsLayer { alpha = pageScrim.value }
-                        .background(MaterialTheme.colorScheme.background),
-                )
-            }
-
             AnimatedVisibility(
-                visible = current != null && chrome != null && chrome.bottomVisible &&
-                    current.roots.isNotEmpty(),
+                modifier = Modifier.align(Alignment.BottomCenter).onSizeChanged { bottomHeight = it.height },
+                visible = bottomVisible,
                 enter = fadeIn(tween(160)) + expandVertically(tween(200)),
                 exit = fadeOut(tween(120)) + shrinkVertically(tween(160)),
             ) {
@@ -241,6 +247,7 @@ fun ShellScreen(
                     ShellBottomBar(
                         snapshot = current,
                         accent = accent,
+                        webView = coordinator.webView,
                         onSelect = { rootId -> coordinator.selectRoot(rootId) },
                     )
                 }
@@ -270,60 +277,41 @@ fun ShellScreen(
 
 // ---------------------------------------------------------------------------- 液态玻璃材质
 
-/**
- * 顶栏/底栏共用的"液态玻璃"容器。
- *
- * 分层结构（由外到内）：
- * 1. **光晕**：accent 径向渐变 + `Modifier.blur(26.dp)`，在 Android 12+ 上是真实高斯模糊，
- *    低版本自动忽略，不会报错也不会变色；这是最接近"液态"的一层。
- * 2. **投影**：18dp 大半径软阴影，让玻璃片与页面分离。
- * 3. **材质**：深色下用低不透明度白（thin material），浅色下用高不透明度白（thick material），
- *    上下渐变模拟厚度差。
- * 4. **边缘光**：1dp 渐变描边，顶部接近纯白、底部转暗，模拟折射高光。
- */
+/** 只在胶囊轮廓内绘制磨砂、薄填充和边缘高光，外侧始终透明。 */
 @Composable
 private fun GlassPill(
-    accent: Color?,
+    webView: android.webkit.WebView,
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(horizontal = 6.dp, vertical = 4.dp),
+    contentPadding: PaddingValues = PaddingValues(horizontal = 5.dp, vertical = 5.dp),
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    val scheme = MaterialTheme.colorScheme
-    val dark = scheme.background.luminance() < 0.5f
-    val shape = RoundedCornerShape(26.dp)
-    val tint = accent ?: scheme.primary
+    val dark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val shape = RoundedCornerShape(50)
     val fill = if (dark) {
-        listOf(Color.White.copy(alpha = 0.17f), Color.White.copy(alpha = 0.07f))
+        listOf(Color(0xFF25252A).copy(alpha = 0.66f), Color(0xFF19191E).copy(alpha = 0.48f))
     } else {
-        listOf(Color.White.copy(alpha = 0.86f), Color.White.copy(alpha = 0.62f))
+        listOf(Color.White.copy(alpha = 0.66f), Color(0xFFF4F4F8).copy(alpha = 0.46f))
     }
-    val rim = if (dark) {
-        listOf(Color.White.copy(alpha = 0.52f), Color.White.copy(alpha = 0.06f))
-    } else {
-        listOf(Color.White.copy(alpha = 0.98f), Color.Black.copy(alpha = 0.05f))
-    }
-    Box(modifier = modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp)) {
+    val rim = listOf(
+        Color.White.copy(alpha = if (dark) 0.38f else 0.9f),
+        Color.White.copy(alpha = 0.08f),
+        Color.White.copy(alpha = if (dark) 0.18f else 0.5f),
+    )
+    Box(modifier = modifier.padding(horizontal = 22.dp, vertical = 8.dp)) {
         Box(
-            modifier = Modifier
-                .matchParentSize()
-                .blur(26.dp)
-                .background(
-                    brush = Brush.radialGradient(
-                        listOf(tint.copy(alpha = if (dark) 0.42f else 0.26f), Color.Transparent),
-                    ),
-                    shape = shape,
-                ),
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .shadow(elevation = 18.dp, shape = shape, clip = false)
-                .clip(shape)
-                .background(brush = Brush.verticalGradient(fill), shape = shape)
-                .border(width = 1.dp, brush = Brush.verticalGradient(rim), shape = shape)
-                .padding(contentPadding),
-            content = content,
-        )
+            modifier = Modifier.widthIn(max = 360.dp).fillMaxWidth()
+                .shadow(8.dp, shape, clip = false)
+                .clip(shape),
+        ) {
+            WebGlassBackdrop(webView, Modifier.matchParentSize())
+            Column(
+                modifier = Modifier.fillMaxWidth()
+                    .background(Brush.verticalGradient(fill))
+                    .border(0.75.dp, Brush.verticalGradient(rim), shape)
+                    .padding(contentPadding),
+                content = content,
+            )
+        }
     }
 }
 
@@ -361,7 +349,8 @@ private fun ShellTopBar(
         dedupeMoreMenu(snapshot.moreMenu.orEmpty(), snapshot)
     }
 
-    GlassPill(accent = accent) {
+    // 参考 iOS：标题区不套白色大卡片，操作按钮使用各自的圆形薄材质。
+    Column(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth().heightIn(min = 50.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -390,6 +379,8 @@ private fun ShellTopBar(
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
             for (action in inlineActions) {
@@ -510,6 +501,10 @@ private fun BarIconButton(
                 alpha = if (enabled) 1f else 0.4f
             }
             .clip(CircleShape)
+            .background(
+                MaterialTheme.colorScheme.surface.copy(alpha = 0.48f), CircleShape,
+            )
+            .border(0.5.dp, Color.White.copy(alpha = 0.3f), CircleShape)
             .clickable(
                 interactionSource = interaction,
                 indication = LocalIndication.current,
@@ -583,13 +578,11 @@ private fun ActionButton(
 @Composable
 private fun ShellBottomBar(
     snapshot: NavigationSnapshot,
+    webView: android.webkit.WebView,
     accent: Color?,
     onSelect: (String) -> Unit,
 ) {
-    GlassPill(
-        accent = accent,
-        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp),
-    ) {
+    GlassPill(webView = webView) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -614,7 +607,7 @@ private fun ShellBottomBar(
                     },
                     animationSpec = tween(180),
                 )
-                val accentColor = accent ?: MaterialTheme.colorScheme.primary
+                val dark = MaterialTheme.colorScheme.background.luminance() < 0.5f
                 Column(
                     modifier = Modifier
                         .weight(1f)
@@ -623,14 +616,18 @@ private fun ShellBottomBar(
                             scaleX = scale
                             scaleY = scale
                         }
-                        .clip(RoundedCornerShape(18.dp))
-                        .background(accentColor.copy(alpha = 0.16f * highlight))
+                        .clip(RoundedCornerShape(50))
+                        .background(
+                            (if (dark) Color.White else Color.Black)
+                                .copy(alpha = (if (dark) 0.12f else 0.055f) * highlight),
+                        )
                         .clickable(
                             interactionSource = interaction,
                             indication = LocalIndication.current,
                             onClick = { onSelect(root.id) },
                         )
-                        .padding(vertical = 7.dp),
+                        .heightIn(min = 52.dp)
+                        .padding(vertical = 6.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                 ) {
@@ -735,13 +732,24 @@ private fun normalizePath(path: String): String = path.trimEnd('/').lowercase()
 /**
  * chrome.prepare / host.layout 共用的布局声明。
  *
- * 顶栏/底栏是浮动玻璃片，但 WebView 仍排在两者之间（不重叠），
- * 所以 systemSafeArea / chromeOcclusion / contentInsets 继续报 0，
- * 避免网页再叠加一层内边距（校准项见 android/PORTING.md）。
+ * 网页使用完整视口；浮层遮挡作为 contentInsets / chromeOcclusion 交给网页，
+ * 让首尾内容仍可完整滚动到可点击区域。系统安全区已由外层原生布局消费。
  */
-private fun shellLayoutPayload(revision: Int, viewport: IntSize, density: Density): JsonObject {
+private fun shellLayoutPayload(
+    revision: Int,
+    viewport: IntSize,
+    density: Density,
+    topHeight: Int,
+    bottomHeight: Int,
+): JsonObject {
     val width = with(density) { viewport.width.toDp().value.toDouble() }
     val height = with(density) { viewport.height.toDp().value.toDouble() }
+    val chromeInsets = buildJsonObject {
+        put("top", with(density) { topHeight.toDp().value.toDouble() })
+        put("bottom", with(density) { bottomHeight.toDp().value.toDouble() })
+        put("left", 0.0)
+        put("right", 0.0)
+    }
     return buildJsonObject {
         put("layoutRevision", revision)
         put(
@@ -752,8 +760,8 @@ private fun shellLayoutPayload(revision: Int, viewport: IntSize, density: Densit
             },
         )
         put("systemSafeArea", zeroInsets())
-        put("chromeOcclusion", zeroInsets())
-        put("contentInsets", zeroInsets())
+        put("chromeOcclusion", chromeInsets)
+        put("contentInsets", chromeInsets)
         put("keyboardOcclusion", 0.0)
         put("consumedByNativeFrame", false)
     }

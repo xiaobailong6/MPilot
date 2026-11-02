@@ -20,8 +20,8 @@
    这样前端、iOS、Android 三端共用同一套契约。
 2. **前端零改动**：只在 WebView 里补齐 `window.webkit.messageHandlers.*` 与 `window.MoviePilotNative`，
    让前端"以为"自己仍在 iOS 容器里（见第 3 节）。
-3. **不复刻 iOS 观感**：Liquid Glass、`UISheetPresentationController`、`UIMenu` 悬浮预览在 Android 上没有等价物，
-   强行模拟只会得到"高成本 + 不自然"。Android 走 Material 3，把预算放在协议与交互正确性上。
+3. **外壳尽量贴近 iOS 参考图**：透明标题区、独立圆形操作按钮与居中磨砂胶囊底栏。
+   Android 12+ 对 WebView 局部采样做模糊，旧系统降级半透明材质，不宣称等同系统 Liquid Glass。
 
 ## 2. 组件映射
 
@@ -186,10 +186,9 @@ notificationInstallation: "<安装 UUID>"
 
 ### 6.5 布局 payload 需要真机校准
 
-- 当前 `systemSafeArea` / `chromeOcclusion` / `contentInsets` / `keyboardOcclusion` 全部报 0，
-  因为 WebView 被放在系统栏与顶栏之内的矩形区域里（网页拿到的是已经扣好的视口）。
-- 如果改成"WebView 全屏 + 顶栏浮在上面"（更接近 iOS），就必须改成上报真实 safe area，
-  否则网页会多留一层内边距。改动只涉及 `ui/ShellScreen.kt` 的 `shellLayoutPayload`。
+- WebView 铺满系统安全区内的内容视口，顶栏和底栏叠放在网页上，不再占用整条矩形底板。
+- `chromeOcclusion` / `contentInsets` 上报当前可见浮层的实测高度，隐藏时归零。
+  `systemSafeArea` / `keyboardOcclusion` 仍为 0，因为系统安全区与键盘已由原生 padding 消费。
 - 校准方法：在网页控制台打印收到的 payload，逐项与 `document.documentElement.clientHeight` 对照。
 
 ### 6.6 键盘
@@ -233,12 +232,12 @@ notificationInstallation: "<安装 UUID>"
 
 ### 6.11 外壳观感约定（玻璃 / 排版 / 动画 / 去重）
 
-实现集中在 `ui/ShellScreen.kt`，改观感只动这一个文件：
+实现位于 `ui/ShellScreen.kt` 与 `ui/WebGlassBackdrop.kt`：
 
-- **液态玻璃**：Android 没有 backdrop blur，`Modifier.blur()` 模糊的是自己而不是背后内容。
-  `GlassPill` 用四层叠加逼近：accent 径向光晕（`blur(26.dp)`，API 31+ 真实高斯模糊）、18dp 投影、
-  深浅色两套半透明分层填充（thick/thin material）、顶部亮底部暗的边缘光描边。
-  真要"内容从 bar 下透出来"，得改成全屏 WebView + 按 `chromeOcclusion` 协商，改动面很大，暂不做。
+- **磨砂玻璃**：WebView 始终铺满，底栏胶囊独立覆盖，四周不画矩形背景。
+  Android 12+ 低分辨率采样底栏后方网页，通过 RenderEffect 模糊；上方叠加中性薄填充、细边缘光和轻阴影。
+  只采样局部并复用缓冲区，刷新上限约 12fps；旧系统使用半透明降级，不绘制未模糊副本。
+  顶部取消整块玻璃卡片，保留透明标题与独立圆形按钮。采样质量与性能仍需真实 WebView 验收。
 - **排版不再写死高度**：一律 `heightIn(min = …)`；标题、标签单行 + `Ellipsis`；
   页内标签横向可滚动；顶栏内联动作按屏宽取 2/3/4 个，其余进溢出菜单。
   系统大字体下外壳会自然变高，不会再截断文字。
