@@ -205,11 +205,17 @@ class WebCoordinator(
         WebViewFeature.isFeatureSupported(WebViewFeature.DOCUMENT_START_SCRIPT)
 
     private fun injectDocumentStartScript() {
+        // 本地资源只改变当前实例的外观，保持桥接协议与服务端业务完全不变。
+        val appearance = context.assets.open("native-glass.js").bufferedReader().use { it.readText() }
+            .replace("\"__MP_GLASS_ORIGIN__\"", jsStringLiteral(instance.address.origin.rule))
+            .replace("\"__MP_GLASS_CSS__\"", jsStringLiteral(
+                context.assets.open("native-glass.css").bufferedReader().use { it.readText() },
+            ))
         val script = BridgeScript.build(
             installation = installation,
             session = authentication.session,
             origin = instance.address.origin.rule,
-        )
+        ) + "\n" + appearance
         documentStartScript = script
         if (supportsDocumentStart()) {
             WebViewCompat.addDocumentStartJavaScript(webView, script, setOf(instance.address.origin.rule))

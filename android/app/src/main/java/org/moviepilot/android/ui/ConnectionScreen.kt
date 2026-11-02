@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -185,7 +184,7 @@ fun ConnectionScreen(
             Text("在本机记住登录状态", style = MaterialTheme.typography.bodyMedium)
         }
         Spacer(Modifier.height(20.dp))
-        Button(
+        GlassButton(
             onClick = { submit() },
             enabled = !busy,
             modifier = Modifier.fillMaxWidth(),
@@ -200,6 +199,7 @@ fun ConnectionScreen(
             Spacer(Modifier.height(16.dp))
             Text(
                 text = message,
+                modifier = Modifier.fillMaxWidth().glassSurface().padding(16.dp),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.error,
             )

@@ -4,20 +4,15 @@ import android.view.ViewGroup
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -35,9 +30,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -45,9 +39,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -66,8 +58,6 @@ import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
@@ -101,8 +91,8 @@ import org.moviepilot.android.web.WebCoordinator
  * 原生外壳：顶栏、页内标签、底部入口、WebView 与恢复页。
  *
  * 三条与 iOS 不同的落地约定（Android 侧没有系统级等价物）：
- * 1. **玻璃底栏覆盖网页**：局部采样 WebView 作为磨砂背景；顶部保持透明，
- *    只在胶囊内部绘制材质，不再保留整条矩形底板。
+ * 1. **玻璃底栏覆盖网页**：原生使用稳定薄材质，网页浮层使用 CSS 背景模糊；
+ *    不再定时软件截图 WebView，避免干扰仪表盘图表。
  * 2. **排版不写死高度**：一律 `heightIn(min = …)`，标题/标签单行省略，
  *    页内标签横向可滚动，动作按屏宽收放 —— 系统大字体下不会再截断。
  * 3. **WebView 始终固定在同一层级**：它一旦跨 Window 或换父容器就会白屏/重载，
@@ -177,8 +167,6 @@ fun ShellScreen(
     val topVisible = snapshot?.chrome?.topVisible == true
     val bottomVisible = snapshot?.let { it.chrome.bottomVisible && it.roots.isNotEmpty() } == true
     LaunchedEffect(coordinator, viewport, topHeight, bottomHeight, topVisible, bottomVisible) {
-        if (!topVisible) topHeight = 0
-        if (!bottomVisible) bottomHeight = 0
         if (viewport == IntSize.Zero) return@LaunchedEffect
         withFrameNanos { }
         coordinator.layoutChanged()
@@ -188,21 +176,6 @@ fun ShellScreen(
     val chrome = current?.chrome
     val accent = chrome?.accentColor?.let(::parseHexColor)
 
-    // 路由切换时盖一层底色再淡出，给页面切换一个可感知的过渡；
-    // 只在"已有上一页且路由确实变了"时触发，首屏不闪。
-    val routeKey = current?.route?.fullPath ?: ""
-    val pageScrim = remember { Animatable(0f) }
-    var lastRoute by remember { mutableStateOf<String?>(null) }
-    LaunchedEffect(routeKey) {
-        val previous = lastRoute
-        lastRoute = routeKey
-        if (previous == null || previous == routeKey || routeKey.isEmpty()) return@LaunchedEffect
-        pageScrim.snapTo(0.45f)
-        pageScrim.animateTo(
-            targetValue = 0f,
-            animationSpec = tween(durationMillis = 240, easing = FastOutSlowInEasing),
-        )
-    }
 
     Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
         Box(modifier = Modifier.fillMaxSize().safeDrawingPadding().imePadding()) {
@@ -213,13 +186,8 @@ fun ShellScreen(
                     modifier = Modifier.fillMaxSize().onSizeChanged { viewport = it },
                 )
             }
-            Box(
-                modifier = Modifier.fillMaxSize()
-                    .graphicsLayer { alpha = pageScrim.value }
-                    .background(MaterialTheme.colorScheme.background),
-            )
             AnimatedVisibility(
-                modifier = Modifier.align(Alignment.TopCenter).onSizeChanged { topHeight = it.height },
+                modifier = Modifier.align(Alignment.TopCenter),
                 visible = topVisible,
                 enter = fadeIn(tween(160)) + slideInVertically(tween(200)) { -it },
                 exit = fadeOut(tween(120)) + slideOutVertically(tween(160)) { -it },
@@ -228,6 +196,7 @@ fun ShellScreen(
                     ShellTopBar(
                         snapshot = current,
                         accent = accent,
+                        modifier = Modifier.onSizeChanged { topHeight = it.height },
                         onBack = { coordinator.back() },
                         onAction = { action, menuActionId -> coordinator.invokeAction(action, menuActionId) },
                         onSelectTab = { ownerId, tabId -> coordinator.selectHeaderTab(ownerId, tabId) },
@@ -238,16 +207,16 @@ fun ShellScreen(
             }
 
             AnimatedVisibility(
-                modifier = Modifier.align(Alignment.BottomCenter).onSizeChanged { bottomHeight = it.height },
+                modifier = Modifier.align(Alignment.BottomCenter),
                 visible = bottomVisible,
-                enter = fadeIn(tween(160)) + expandVertically(tween(200)),
-                exit = fadeOut(tween(120)) + shrinkVertically(tween(160)),
+                enter = fadeIn(tween(160)),
+                exit = fadeOut(tween(120)),
             ) {
                 if (current != null) {
                     ShellBottomBar(
                         snapshot = current,
                         accent = accent,
-                        webView = coordinator.webView,
+                        modifier = Modifier.onSizeChanged { bottomHeight = it.height },
                         onSelect = { rootId -> coordinator.selectRoot(rootId) },
                     )
                 }
@@ -280,38 +249,17 @@ fun ShellScreen(
 /** 只在胶囊轮廓内绘制磨砂、薄填充和边缘高光，外侧始终透明。 */
 @Composable
 private fun GlassPill(
-    webView: android.webkit.WebView,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(horizontal = 5.dp, vertical = 5.dp),
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    val dark = MaterialTheme.colorScheme.background.luminance() < 0.5f
-    val shape = RoundedCornerShape(50)
-    val fill = if (dark) {
-        listOf(Color(0xFF25252A).copy(alpha = 0.66f), Color(0xFF19191E).copy(alpha = 0.48f))
-    } else {
-        listOf(Color.White.copy(alpha = 0.66f), Color(0xFFF4F4F8).copy(alpha = 0.46f))
-    }
-    val rim = listOf(
-        Color.White.copy(alpha = if (dark) 0.38f else 0.9f),
-        Color.White.copy(alpha = 0.08f),
-        Color.White.copy(alpha = if (dark) 0.18f else 0.5f),
-    )
     Box(modifier = modifier.padding(horizontal = 22.dp, vertical = 8.dp)) {
-        Box(
+        Column(
             modifier = Modifier.widthIn(max = 360.dp).fillMaxWidth()
-                .shadow(8.dp, shape, clip = false)
-                .clip(shape),
-        ) {
-            WebGlassBackdrop(webView, Modifier.matchParentSize())
-            Column(
-                modifier = Modifier.fillMaxWidth()
-                    .background(Brush.verticalGradient(fill))
-                    .border(0.75.dp, Brush.verticalGradient(rim), shape)
-                    .padding(contentPadding),
-                content = content,
-            )
-        }
+                .glassSurface(RoundedCornerShape(50))
+                .padding(contentPadding),
+            content = content,
+        )
     }
 }
 
@@ -321,13 +269,14 @@ private fun GlassPill(
 private fun ShellTopBar(
     snapshot: NavigationSnapshot,
     accent: Color?,
+    modifier: Modifier = Modifier,
     onBack: () -> Unit,
     onAction: (ActionSnapshot, String?) -> Unit,
     onSelectTab: (String, String) -> Unit,
     onOpenMoreItem: (MoreMenuItem) -> Unit,
     onSignOut: () -> Unit,
 ) {
-    var moreOpen by remember { mutableStateOf(false) }
+    var moreOpen by remember(snapshot.route.fullPath) { mutableStateOf(false) }
     val leading = remember(snapshot.actions) {
         snapshot.actions.filter { it.position == ActionPosition.Leading }
     }
@@ -350,7 +299,7 @@ private fun ShellTopBar(
     }
 
     // 参考 iOS：标题区不套白色大卡片，操作按钮使用各自的圆形薄材质。
-    Column(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp)) {
+    Column(modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth().heightIn(min = 50.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -359,11 +308,6 @@ private fun ShellTopBar(
                 BarIconButton(onClick = onBack) {
                     Icon(Icons.Filled.ArrowBack, contentDescription = "返回", modifier = Modifier.size(22.dp))
                 }
-            } else {
-                Spacer(Modifier.width(10.dp))
-            }
-            for (action in leading) {
-                ActionButton(action = action, accent = accent, onAction = onAction)
             }
             AnimatedContent(
                 targetState = snapshot.route.title,
@@ -375,23 +319,31 @@ private fun ShellTopBar(
             ) { title ->
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        shadow = androidx.compose.ui.graphics.Shadow(
+                            color = MaterialTheme.colorScheme.background,
+                            blurRadius = 12f,
+                        ),
+                    ),
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    textAlign = TextAlign.Center,
+                    textAlign = TextAlign.Start,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
-            for (action in inlineActions) {
-                ActionButton(action = action, accent = accent, onAction = onAction)
+            for (action in leading + inlineActions) {
+                androidx.compose.runtime.key(snapshot.route.fullPath, action.ownerId, action.actionId) {
+                    ActionButton(action = action, accent = accent, onAction = onAction)
+                }
             }
             Box {
                 BarIconButton(onClick = { moreOpen = true }) {
                     Icon(Icons.Filled.MoreVert, contentDescription = "更多", modifier = Modifier.size(22.dp))
                 }
-                DropdownMenu(expanded = moreOpen, onDismissRequest = { moreOpen = false }) {
+                GlassMenu(expanded = moreOpen, onDismissRequest = { moreOpen = false }) {
                     for (item in overflowItems) {
+                        androidx.compose.runtime.key(item.id) {
                         DropdownMenuItem(
                             text = {
                                 Column {
@@ -412,19 +364,41 @@ private fun ShellTopBar(
                                 onOpenMoreItem(item)
                             },
                         )
+                        }
                     }
                     if (overflowItems.isNotEmpty() && overflowActions.isNotEmpty()) {
                         HorizontalDivider()
                     }
                     for (action in overflowActions) {
-                        DropdownMenuItem(
-                            text = { Text(action.title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                            enabled = action.enabled,
-                            onClick = {
-                                moreOpen = false
-                                onAction(action, null)
-                            },
-                        )
+                        androidx.compose.runtime.key(snapshot.route.fullPath, action.ownerId, action.actionId) {
+                            val children = action.menu
+                            if (children.isNullOrEmpty()) {
+                                DropdownMenuItem(
+                                    text = { Text(action.title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                                    enabled = action.enabled,
+                                    onClick = { moreOpen = false; onAction(action, null) },
+                                )
+                            } else {
+                                // 在同一菜单中展开子项，避免嵌套 Popup 造成焦点和选中残留。
+                                Text(
+                                    action.title,
+                                    style = MaterialTheme.typography.labelMedium,
+                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                                )
+                                for (item in children) {
+                                    androidx.compose.runtime.key(item.actionId) {
+                                        DropdownMenuItem(
+                                            text = { Text(item.title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                                            enabled = action.enabled && item.enabled,
+                                            trailingIcon = if (item.selected == true) {
+                                                { Text("✓", color = MaterialTheme.colorScheme.primary) }
+                                            } else null,
+                                            onClick = { moreOpen = false; onAction(action, item.actionId) },
+                                        )
+                                    }
+                                }
+                            }
+                        }
                     }
                     if (overflowItems.isNotEmpty() || overflowActions.isNotEmpty()) {
                         HorizontalDivider()
@@ -462,7 +436,7 @@ private fun ShellTopBar(
                     )
                     TextButton(
                         onClick = { onSelectTab(tabs.ownerId, item.id) },
-                        modifier = Modifier.heightIn(min = 34.dp),
+                        modifier = Modifier.heightIn(min = 34.dp).glassSurface(RoundedCornerShape(50)),
                     ) {
                         Text(
                             text = item.title,
@@ -500,11 +474,7 @@ private fun BarIconButton(
                 scaleY = scale
                 alpha = if (enabled) 1f else 0.4f
             }
-            .clip(CircleShape)
-            .background(
-                MaterialTheme.colorScheme.surface.copy(alpha = 0.48f), CircleShape,
-            )
-            .border(0.5.dp, Color.White.copy(alpha = 0.3f), CircleShape)
+            .glassSurface(CircleShape)
             .clickable(
                 interactionSource = interaction,
                 indication = LocalIndication.current,
@@ -523,7 +493,7 @@ private fun ActionButton(
     accent: Color?,
     onAction: (ActionSnapshot, String?) -> Unit,
 ) {
-    var menuOpen by remember { mutableStateOf(false) }
+    var menuOpen by remember(action.ownerId, action.actionId) { mutableStateOf(false) }
     val icon = symbolIcon(action.icon)
     val menu = action.menu
     Box {
@@ -551,16 +521,21 @@ private fun ActionButton(
             }
         }
         if (!menu.isNullOrEmpty()) {
-            DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
+            GlassMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
                 for (item in menu) {
+                    androidx.compose.runtime.key(item.actionId) {
                     DropdownMenuItem(
                         text = { Text(item.title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                        enabled = item.enabled,
+                        enabled = action.enabled && item.enabled,
+                        trailingIcon = if (item.selected == true) {
+                            { Text("✓", color = MaterialTheme.colorScheme.primary) }
+                        } else null,
                         onClick = {
                             menuOpen = false
                             onAction(action, item.actionId)
                         },
                     )
+                    }
                 }
             }
         }
@@ -578,16 +553,17 @@ private fun ActionButton(
 @Composable
 private fun ShellBottomBar(
     snapshot: NavigationSnapshot,
-    webView: android.webkit.WebView,
     accent: Color?,
+    modifier: Modifier = Modifier,
     onSelect: (String) -> Unit,
 ) {
-    GlassPill(webView = webView) {
+    GlassPill(modifier = modifier) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             for (root in snapshot.roots) {
+                androidx.compose.runtime.key(root.id) {
                 val selected = root.id == snapshot.route.rootId
                 val interaction = remember(root.id) { MutableInteractionSource() }
                 val pressed by interaction.collectIsPressedAsState()
@@ -651,6 +627,7 @@ private fun ShellBottomBar(
                         modifier = Modifier.widthIn(max = 76.dp),
                     )
                 }
+                }
             }
         }
     }
@@ -690,8 +667,8 @@ private fun RecoveryOverlay(message: String, onRetry: () -> Unit, onSignOut: () 
                 textAlign = TextAlign.Center,
             )
             Spacer(Modifier.height(20.dp))
-            Button(onClick = onRetry) { Text("重新加载") }
-            TextButton(onClick = onSignOut) { Text("切换实例") }
+            GlassButton(onClick = onRetry) { Text("重新加载") }
+            GlassButton(onClick = onSignOut) { Text("切换实例") }
         }
     }
 }

@@ -6,6 +6,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
 /**
  * 使用 Material 3 提供排版与基础色；外壳以透明顶栏、磨砂胶囊逼近 iOS 参考图。
@@ -20,9 +21,23 @@ fun MoviePilotTheme(
     content: @Composable () -> Unit,
 ) {
     val colors = if (darkTheme) {
-        darkColorScheme(primary = DarkAccent, secondary = DarkAccent)
+        darkColorScheme(
+            primary = DarkAccent, secondary = DarkAccent,
+            background = Color(0xFF0D1220), surface = Color(0xFF252A38),
+        )
     } else {
-        lightColorScheme(primary = LightAccent, secondary = LightAccent)
+        lightColorScheme(
+            primary = LightAccent, secondary = LightAccent,
+            background = Color(0xFFF2F3F8), surface = Color(0xFFF9FAFE),
+        )
     }
-    MaterialTheme(colorScheme = colors, content = content)
+    MaterialTheme(
+        colorScheme = colors,
+        shapes = androidx.compose.material3.Shapes(
+            small = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
+            medium = androidx.compose.foundation.shape.RoundedCornerShape(22.dp),
+            large = androidx.compose.foundation.shape.RoundedCornerShape(28.dp),
+        ),
+        content = content,
+    )
 }

@@ -1,0 +1,75 @@
+/* App 内公共材质。只覆盖组件外观，不修改路由、选中状态、定位或业务 DOM。 */
+html[data-mp-glass] {
+  --mp-glass-fill: rgba(255, 255, 255, .78);
+  --mp-glass-panel: rgba(248, 249, 253, .88);
+  --mp-glass-rim: rgba(255, 255, 255, .9);
+  --mp-glass-shadow: 0 6px 22px rgba(30, 38, 65, .08);
+  --mp-glass-inset: inset 0 1px 0 rgba(255, 255, 255, .7);
+}
+/* Vuetify 的用户主题优先于系统主题；弹层自带的主题类也能独立继承。 */
+html[data-mp-glass] .v-theme--dark {
+  --mp-glass-fill: rgba(39, 43, 56, .82);
+  --mp-glass-panel: rgba(34, 38, 50, .9);
+  --mp-glass-rim: rgba(255, 255, 255, .16);
+  --mp-glass-shadow: 0 6px 22px rgba(0, 0, 0, .2);
+  --mp-glass-inset: inset 0 1px 0 rgba(255, 255, 255, .13);
+}
+html[data-mp-glass] .v-theme--light {
+  --mp-glass-fill: rgba(255, 255, 255, .78);
+  --mp-glass-panel: rgba(248, 249, 253, .88);
+  --mp-glass-rim: rgba(255, 255, 255, .9);
+  --mp-glass-shadow: 0 6px 22px rgba(30, 38, 65, .08);
+  --mp-glass-inset: inset 0 1px 0 rgba(255, 255, 255, .7);
+}
+/* 仪表盘等常驻卡片不创建 backdrop 合成层，不干扰 canvas / 图表更新。 */
+html[data-mp-glass] .v-card:not([class*="bg-"]):not(.v-card--variant-text):not(.v-card--variant-plain) {
+  background-color: var(--mp-glass-fill) !important;
+  border-radius: 22px !important;
+  box-shadow: var(--mp-glass-inset), var(--mp-glass-shadow) !important;
+  outline: 1px solid var(--mp-glass-rim);
+  outline-offset: -1px;
+}
+/* 仅短时浮层模糊后方内容；不在卡片内嵌的列表或每个按钮上重复模糊。 */
+html[data-mp-glass] :is(.v-menu, .v-dialog) > .v-overlay__content > :is(.v-list, .v-card),
+html[data-mp-glass] .v-snackbar__wrapper,
+html[data-mp-glass] .v-tooltip > .v-overlay__content {
+  background-color: var(--mp-glass-panel) !important;
+  border-radius: 24px !important;
+  box-shadow: var(--mp-glass-inset), var(--mp-glass-shadow) !important;
+  outline: 1px solid var(--mp-glass-rim);
+  outline-offset: -1px;
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  backdrop-filter: blur(18px) saturate(135%);
+  color: rgb(var(--v-theme-on-surface, 30, 32, 40)) !important;
+}
+/* 主色/危险色按钮保留原色，避免白色文字落在白色玻璃上。 */
+html[data-mp-glass] .v-btn:not([class*="bg-"]):not(.v-btn--variant-plain):not(.v-btn--variant-text) {
+  background-color: var(--mp-glass-fill) !important;
+  box-shadow: var(--mp-glass-inset), 0 2px 8px rgba(30, 38, 65, .06) !important;
+  outline: 1px solid var(--mp-glass-rim);
+  outline-offset: -1px;
+}
+html[data-mp-glass] :is(.v-btn, .v-chip) { border-radius: 999px !important; }
+html[data-mp-glass] .v-field { border-radius: 16px !important; }
+html[data-mp-glass] .v-alert {
+  border-radius: 20px !important;
+  box-shadow: var(--mp-glass-inset), var(--mp-glass-shadow) !important;
+}
+/* 保留真正的 active/selected 状态，不把 hover 或 focus 伪装成已选中。 */
+html[data-mp-glass] .v-list-item { border-radius: 14px; }
+html[data-mp-glass] .v-list-item:focus-visible,
+html[data-mp-glass] .v-btn:focus-visible {
+  outline: 2px solid rgb(var(--v-theme-primary, 47, 143, 216)) !important;
+  outline-offset: 2px;
+}
+@supports not (backdrop-filter: blur(1px)) {
+  html[data-mp-glass] .v-snackbar__wrapper,
+  html[data-mp-glass] :is(.v-menu, .v-dialog) > .v-overlay__content > :is(.v-list, .v-card) {
+    background-color: rgb(var(--v-theme-surface, 248, 249, 253)) !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-mp-glass] :is(.v-btn, .v-card, .v-snackbar__wrapper) {
+    transition: none !important;
+  }
+}
